@@ -26,15 +26,27 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
         if utils.pointInBox(
               self.x, self.y, self.w, self.h,
               var2, var3) and #self.items > var3 - self.y then
-          self.selected = var3 - self.y + 1
-          self.onItemSelected(self.items[self.selected])
-          self:render()
+          self:select(var3 - self.y + 1)
         end
+      end
+    end,
+    select = function(self, i)
+      if #self.items == 0 then
+        self.selected = nil
+      else
+        if i > 0 and i <= #self.items then
+          self.selected = i
+        else
+          self.selected = 1
+        end
+        self.onItemSelected(self.items[self.selected])
+        self:render()
       end
     end,
     removeSelected = function(self)
       if self.selected then
         table.remove(self.items, self.selected)
+        self:select(self.selected)
         self:render()
       end
     end,
@@ -42,10 +54,14 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
       utils.clearTable(self.items)
       self.selected = nil
       self:render()
+    end,
+    add = function(self, item)
+      table.insert(self.items, item)
+      self:select(#self.items)
     end
   }
 
-  this.selected = 1
+  this.selected = false
   this.x = x
   this.y = y
   this.w = w
