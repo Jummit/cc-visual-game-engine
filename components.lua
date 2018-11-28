@@ -34,9 +34,11 @@ components.pos = {
 components.sprite = {
   args = {
     texture = {
-        "aaa",
-        "bbb",
-        "ccc"},
+        " 3333 ",
+        "3b33b3",
+        "333333",
+        "3bbbb3",
+        " 3333 "},
   },
 
   render = function(self)
@@ -44,7 +46,7 @@ components.sprite = {
       local line = self.texture[y]
       for x = 1, #line do
         local char = string.sub(line, x, x)
-        if type(char) == "string" and #char == 1 then
+        if type(char) == "string" and char ~= " " then
           term.setCursorPos(x, y)
           term.blit(char, char, char)
         end
