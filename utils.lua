@@ -25,4 +25,19 @@ function utils.printCenter(x, y, w, h, text)
   term.write(text)
 end
 
+local copyTable
+function copyTable(t)
+  local n = {}
+  for k, v in pairs(t) do
+    if type(v) == "table" then
+      n[k] = copyTable(v)
+    else
+      n[k] = v
+    end
+  end
+  return n
+end
+
+utils.copyTable = copyTable
+
 return utils

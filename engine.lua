@@ -4,6 +4,7 @@ local utils = require "utils"
 local components = require "components"
 local newAddAndDeleteButtons = require "addAndDeleteButtons"
 local newComponentWindow = require "newComponentWindow"
+componentToAdd = nil
 
 local gameEntities = {
   {
@@ -156,6 +157,13 @@ function redraw()
 end
 
 local function handleEvents(event, var1, var2, var3)
+  if componentsToAdd then
+    for _, component in ipairs(componentsToAdd) do
+      componentList:add(component)
+    end
+    componentsToAdd = nil
+  end
+
   if newComponentWindow.visible then
     newComponentWindow:update(event, var1, var2, var3)
   else
