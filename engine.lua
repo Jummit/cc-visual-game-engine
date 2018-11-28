@@ -4,7 +4,6 @@ local utils = require "utils"
 local components = require "components"
 local newAddAndDeleteButtons = require "addAndDeleteButtons"
 local newComponentWindow = require "newComponentWindow"
-componentToAdd = nil
 
 local gameEntities = {}
 
@@ -14,7 +13,7 @@ local componentListHeight = 7
 local sideBarWidth = 12
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth - 1, h)
 
-local componentList = newList(
+componentList = newList(
     2, entityListHeight + 4, sideBarWidth - 2, componentListHeight,
     {},
     function(item)
@@ -37,7 +36,6 @@ local componentList = newList(
       return true
     end)
 
-local entityList
 entityList = newList(
     2, 2, sideBarWidth - 2, entityListHeight,
     gameEntities,
@@ -115,13 +113,6 @@ function redraw()
 end
 
 local function handleEvents(event, var1, var2, var3)
-  if componentsToAdd then
-    for _, component in ipairs(componentsToAdd) do
-      componentList:add(component)
-    end
-    componentsToAdd = nil
-  end
-
   if newComponentWindow.visible then
     newComponentWindow:update(event, var1, var2, var3)
   else

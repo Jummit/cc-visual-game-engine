@@ -32,13 +32,20 @@ local componentList = newList(x + 3, y + 2, w - 6, h - 3, {},
     end,
     function(item)
       local c = components[item]
-      componentsToAdd = {}
 
       for _, need in ipairs(c.needs) do
-        table.insert(componentsToAdd, createComponent(need))
+        local needExists = false
+        for _, component in ipairs(componentList.items) do
+          if need == component.type then
+            needExists = true
+          end
+        end
+        if not needExists then
+          componentList:add(createComponent(need))
+        end
       end
 
-      table.insert(componentsToAdd, createComponent(item))
+      componentList:add(createComponent(item))
 
       newComponentWindow.visible = false
     end)
