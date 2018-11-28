@@ -92,7 +92,6 @@ local entityList = newList(
     function(item)
       componentList.items = item.components
       componentList:select(1)
-      componentList:render()
     end)
 
 local buttons = {
@@ -127,7 +126,7 @@ local function renderGame()
   end
 end
 
-local function redraw()
+function redraw()
   utils.renderBox(1, 1, w, h, colors.white)
   utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
   entityList:render()

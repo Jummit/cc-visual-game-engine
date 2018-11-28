@@ -40,20 +40,17 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
           self.selected = 1
         end
         self.onItemSelected(self.items[self.selected])
-        self:render()
       end
     end,
     removeSelected = function(self)
       if self.selected then
         table.remove(self.items, self.selected)
         self:select(self.selected)
-        self:render()
       end
     end,
     clear = function(self)
       utils.clearTable(self.items)
       self.selected = nil
-      self:render()
     end,
     add = function(self, item)
       table.insert(self.items, item)
