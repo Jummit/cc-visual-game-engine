@@ -49,7 +49,7 @@ local gameEntities = {
 }
 local w, h = term.getSize()
 local entityListHeight = 7
-local componentListHeight = 8
+local componentListHeight = 7
 local sideBarWidth = 12
 
 local componentList = newList(
@@ -61,6 +61,7 @@ local componentList = newList(
     function(item)
 
     end)
+
 local entityList = newList(
     2, 2, sideBarWidth - 2, entityListHeight,
     gameEntities,
@@ -73,27 +74,26 @@ local entityList = newList(
       componentList:render()
     end)
 
---[[local buttons = {
-  newButton(
-      2, entityListHeight + 2, 5, 1,
-      "del",
-      colors.red, colors.orange, colors.white,
-      function()
-      end),
-  newButton(
-      sideBarWidth - 5, entityListHeight + 2, 5, 1,
-      "add",
-      colors.green, colors.lime, colors.white,
-      function()
-      end)
-}]]
 local buttons = {
   newAddAndDeleteButtons(
       2, entityListHeight + 2,
       function()
+        table.remove(entityList.items, entityList.selected)
+        componentList.items = {}
+        componentList.selected = nil
+        entityList:render()
+        componentList:render()
       end,
       function()
-      end)
+      end),
+  newAddAndDeleteButtons(
+      2, entityListHeight + componentListHeight + 4,
+      function()
+        table.remove(componentList.items, componentList.selected)
+        componentList:render()
+      end,
+      function()
+      end),
 }
 
 local function renderButtons()
