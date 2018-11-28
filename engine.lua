@@ -48,10 +48,11 @@ local gameEntities = {
 local w, h = term.getSize()
 local entityListHeight = 8
 local componentListHeight = 8
-local componentList = newList(
-    2, entityListHeight + 3, 8, componentListHeight,
-    gameEntities[1].components,
+local sideBarWidth = 12
 
+local componentList = newList(
+    2, entityListHeight + 3, sideBarWidth - 2, componentListHeight,
+    gameEntities[1].components,
     function(item)
       return item.type
     end,
@@ -59,7 +60,7 @@ local componentList = newList(
 
     end)
 local entityList = newList(
-    2, 2, 8, entityListHeight,
+    2, 2, sideBarWidth - 2, entityListHeight,
     gameEntities,
     function(item)
       return item.name
@@ -87,7 +88,7 @@ local function handleEvents(event, var1, var2, var3)
 end
 
 utils.renderBox(1, 1, w, h, colors.white)
-utils.renderBox(1, 1, 10, h, colors.lightGray)
+utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
 redraw()
 while true do
   local event, var1, var2, var3 = os.pullEvent()
