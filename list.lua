@@ -8,14 +8,14 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
       local next_y = y
       for i, item in ipairs(self.items) do
         if i == self.selected then
-          term.setBackgroundColor(colors.lightGray)
+          term.setTextColor(colors.lightGray)
         end
 
         term.setCursorPos(x, next_y)
         term.write(self.getLabel(item))
 
         if i == self.selected then
-          term.setBackgroundColor(colors.gray)
+          term.setTextColor(colors.white)
         end
 
         next_y = next_y + 1
