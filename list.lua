@@ -4,18 +4,19 @@ return function(x, y, w, h, items, getLabel, onItemSelected, onDoubleClick, shou
   local this = {
     render = function(self)
       local x, y, w, h = self.x, self.y, self.w, self.h
+      term.setTextColor(colors.lightGray)
       utils.renderBox(x, y, w, h, colors.gray)
       local next_y = y
       for i, item in ipairs(self.items) do
         if i == self.selected then
-          term.setTextColor(colors.lightGray)
+          term.setTextColor(colors.white)
         end
 
         term.setCursorPos(x, next_y)
         term.write(self.getLabel(item))
 
         if i == self.selected then
-          term.setTextColor(colors.white)
+          term.setTextColor(colors.lightGray)
         end
 
         next_y = next_y + 1
