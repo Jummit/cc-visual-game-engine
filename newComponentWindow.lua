@@ -29,6 +29,8 @@ local componentList = newList(x + 3, y + 2, w - 6, h - 3, {},
       return item
     end,
     function(item)
+    end,
+    function(item)
       local c = components[item]
       componentsToAdd = {}
 

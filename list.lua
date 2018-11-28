@@ -1,6 +1,6 @@
 local utils = require "utils"
 
-return function(x, y, w, h, items, getLabel, onItemSelected, shouldDelete)
+return function(x, y, w, h, items, getLabel, onItemSelected, onDoubleClick, shouldDelete)
   local this = {
     render = function(self)
       local x, y, w, h = self.x, self.y, self.w, self.h
@@ -26,7 +26,14 @@ return function(x, y, w, h, items, getLabel, onItemSelected, shouldDelete)
         if utils.pointInBox(
               self.x, self.y, self.w, self.h,
               var2, var3) and #self.items > var3 - self.y then
-          self:select(var3 - self.y + 1)
+          local toSelect = var3 - self.y + 1
+          if self.selected == toSelect then
+            if self.onDoubleClick then
+              self.onDoubleClick(self.items[self.selected])
+            end
+          else
+            self:select(toSelect)
+          end
         end
       end
     end,
@@ -66,6 +73,7 @@ return function(x, y, w, h, items, getLabel, onItemSelected, shouldDelete)
   this.items = items
   this.getLabel = getLabel
   this.onItemSelected = onItemSelected
+  this.onDoubleClick = onDoubleClick
   this.shouldDelete = shouldDelete
 
   return this

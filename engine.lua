@@ -21,7 +21,10 @@ local componentList = newList(
       return item.type
     end,
     function(item)
-
+      -- on select
+    end,
+    function(item)
+      -- on double click
     end,
     function(components, toDelete)
       for _, c in ipairs(components.items) do
@@ -34,7 +37,8 @@ local componentList = newList(
       return true
     end)
 
-local entityList = newList(
+local entityList
+entityList = newList(
     2, 2, sideBarWidth - 2, entityListHeight,
     gameEntities,
     function(item)
@@ -43,6 +47,12 @@ local entityList = newList(
     function(item)
       componentList.items = item.components
       componentList:select(1)
+    end,
+    function(item)
+      term.setCursorPos(entityList.x, entityList.y + entityList.selected - 1)
+      term.setBackgroundColor(colors.gray)
+      term.setTextColor(colors.white)
+      entityList.items[entityList.selected].name = io.read()
     end)
 
 local buttons = {
