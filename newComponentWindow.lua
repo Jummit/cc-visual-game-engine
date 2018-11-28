@@ -21,7 +21,6 @@ local function createComponent(type)
   newComponent.type = type
   newComponent.render = nil
   newComponent.update = nil
-  newComponent.needs = nil
   return newComponent
 end
 

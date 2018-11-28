@@ -22,6 +22,16 @@ local componentList = newList(
     end,
     function(item)
 
+    end,
+    function(components, toDelete)
+      for _, c in ipairs(components.items) do
+        for _, need in ipairs(c.needs) do
+          if toDelete.type == need then
+            return false
+          end
+        end
+      end
+      return true
     end)
 
 local entityList = newList(

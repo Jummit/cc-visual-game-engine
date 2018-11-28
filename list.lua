@@ -1,6 +1,6 @@
 local utils = require "utils"
 
-return function(x, y, w, h, items, getLabel, onItemSelected)
+return function(x, y, w, h, items, getLabel, onItemSelected, shouldDelete)
   local this = {
     render = function(self)
       local x, y, w, h = self.x, self.y, self.w, self.h
@@ -43,7 +43,7 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
       end
     end,
     removeSelected = function(self)
-      if self.selected then
+      if self.selected and ((not self.shouldDelete) or self:shouldDelete(self.items[self.selected])) then
         table.remove(self.items, self.selected)
         self:select(self.selected)
       end
@@ -66,6 +66,7 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
   this.items = items
   this.getLabel = getLabel
   this.onItemSelected = onItemSelected
+  this.shouldDelete = shouldDelete
 
   return this
 end
