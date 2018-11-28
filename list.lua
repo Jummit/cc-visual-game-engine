@@ -31,6 +31,17 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
           self:render()
         end
       end
+    end,
+    removeSelected = function(self)
+      if self.selected then
+        table.remove(self.items, self.selected)
+        self:render()
+      end
+    end,
+    clear = function(self)
+      utils.clearTable(self.items)
+      self.selected = nil
+      self:render()
     end
   }
 

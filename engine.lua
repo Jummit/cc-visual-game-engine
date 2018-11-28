@@ -78,19 +78,15 @@ local buttons = {
   newAddAndDeleteButtons(
       2, entityListHeight + 2,
       function()
-        table.remove(entityList.items, entityList.selected)
-        componentList.items = {}
-        componentList.selected = nil
-        entityList:render()
-        componentList:render()
+        entityList:removeSelected()
+        componentList:clear()
       end,
       function()
       end),
   newAddAndDeleteButtons(
       2, entityListHeight + componentListHeight + 4,
       function()
-        table.remove(componentList.items, componentList.selected)
-        componentList:render()
+        componentList:removeSelected()
       end,
       function()
       end),
