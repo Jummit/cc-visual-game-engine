@@ -118,9 +118,15 @@ local buttons = {
 
 local function renderGame()
   for _, entity in ipairs(gameEntities) do
+    local entityVars = {}
+    for _, component in ipairs(entity.components) do
+      for k, v in pairs(component.args) do
+        entityVars[k] = v
+      end
+    end
     for _, component in ipairs(entity.components) do
       local c = components[component.type]
-      c.render(setmetatable(component.args, {
+      c.render(setmetatable(entityVars, {
           __index = c.args}))
     end
   end
