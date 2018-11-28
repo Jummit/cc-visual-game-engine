@@ -25,7 +25,7 @@ return function(x, y, w, h, items, getLabel, onItemSelected)
       if event == "mouse_click" then
         if utils.pointInBox(
               self.x, self.y, self.w, self.h,
-              var2, var3) then
+              var2, var3) and #self.items > var3 - self.y then
           self.selected = var3 - self.y + 1
           self.onItemSelected(self.items[self.selected])
           self:render()
