@@ -1,5 +1,7 @@
+local success, message = pcall(function()
 local newList = require "list"
 local utils = require "utils"
+local newAddAndDeleteButtons = require "addAndDeleteButtons"
 
 local gameEntities = {
   {
@@ -46,12 +48,12 @@ local gameEntities = {
   }
 }
 local w, h = term.getSize()
-local entityListHeight = 8
+local entityListHeight = 7
 local componentListHeight = 8
 local sideBarWidth = 12
 
 local componentList = newList(
-    2, entityListHeight + 3, sideBarWidth - 2, componentListHeight,
+    2, entityListHeight + 4, sideBarWidth - 2, componentListHeight,
     gameEntities[1].components,
     function(item)
       return item.type
@@ -71,6 +73,40 @@ local entityList = newList(
       componentList:render()
     end)
 
+--[[local buttons = {
+  newButton(
+      2, entityListHeight + 2, 5, 1,
+      "del",
+      colors.red, colors.orange, colors.white,
+      function()
+      end),
+  newButton(
+      sideBarWidth - 5, entityListHeight + 2, 5, 1,
+      "add",
+      colors.green, colors.lime, colors.white,
+      function()
+      end)
+}]]
+local buttons = {
+  newAddAndDeleteButtons(
+      2, entityListHeight + 2,
+      function()
+      end,
+      function()
+      end)
+}
+
+local function renderButtons()
+  for _, button in ipairs(buttons) do
+    button:render()
+  end
+end
+
+local function updateButtons(event, var1, var2, var3)
+  for _, button in ipairs(buttons) do
+    button:update(event, var1, var2, var3)
+  end
+end
 
 local function renderGame()
 
@@ -80,11 +116,13 @@ local function redraw()
   entityList:render()
   componentList:render()
   renderGame()
+  renderButtons()
 end
 
 local function handleEvents(event, var1, var2, var3)
   entityList:update(event, var1, var2, var3)
   componentList:update(event, var1, var2, var3)
+  updateButtons(event, var1, var2, var3)
 end
 
 utils.renderBox(1, 1, w, h, colors.white)
@@ -93,4 +131,12 @@ redraw()
 while true do
   local event, var1, var2, var3 = os.pullEvent()
   handleEvents(event, var1, var2, var3)
+end
+end)
+term.setBackgroundColor(colors.black)
+term.clear()
+term.setCursorPos(1, 1)
+if not success then
+  term.setTextColor(colors.orange)
+  print(message)
 end
