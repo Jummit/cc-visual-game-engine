@@ -3,35 +3,73 @@ local utils = require "utils"
 
 local gameEntities = {
   {
-    label = "test",
+    name = "enemy",
     components = {
       {
-        label = "pos"
+        type = "pos"
       },
       {
-        label = "map"
+        type = "enemyai"
       },
       {
-        label = "movable"
+        type = "light"
       }
     }
   },
   {
-    label = "map"
+    name = "map",
+    components = {
+      {
+        type = "pos"
+      },
+      {
+        type = "map"
+      },
+      {
+        type = "collision"
+      }
+    }
   },
   {
-    label = "player"
+    name = "player",
+    components = {
+      {
+        type = "pos"
+      },
+      {
+        type = "light"
+      },
+      {
+        type = "movable"
+      }
+    }
   }
 }
 local w, h = term.getSize()
 local entityListHeight = 8
 local componentListHeight = 8
-local entityList = newList(
-    2, 2, 8, entityListHeight,
-    gameEntities)
 local componentList = newList(
     2, entityListHeight + 3, 8, componentListHeight,
-    gameEntities[1].components)
+    gameEntities[1].components,
+
+    function(item)
+      return item.type
+    end,
+    function(item)
+
+    end)
+local entityList = newList(
+    2, 2, 8, entityListHeight,
+    gameEntities,
+    function(item)
+      return item.name
+    end,
+    function(item)
+      componentList.items = item.components
+      componentList.selected = 1
+      componentList:render()
+    end)
+
 
 local function renderGame()
 

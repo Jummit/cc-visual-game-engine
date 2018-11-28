@@ -1,6 +1,6 @@
 local utils = require "utils"
 
-return function(x, y, w, h, items)
+return function(x, y, w, h, items, getLabel, onItemSelected)
   local this = {
     render = function(self)
       local x, y, w, h = self.x, self.y, self.w, self.h
@@ -12,7 +12,7 @@ return function(x, y, w, h, items)
         end
 
         term.setCursorPos(x, next_y)
-        term.write(item.label)
+        term.write(self.getLabel(item))
 
         if i == self.selected then
           term.setBackgroundColor(colors.gray)
@@ -27,6 +27,7 @@ return function(x, y, w, h, items)
               self.x, self.y, self.w, self.h,
               var2, var3) then
           self.selected = var3 - self.y + 1
+          self.onItemSelected(self.items[self.selected])
           self:render()
         end
       end
@@ -39,6 +40,8 @@ return function(x, y, w, h, items)
   this.w = w
   this.h = h
   this.items = items
+  this.getLabel = getLabel
+  this.onItemSelected = onItemSelected
 
   return this
 end
