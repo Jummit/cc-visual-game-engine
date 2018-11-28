@@ -3,6 +3,7 @@ local newList = require "list"
 local utils = require "utils"
 local components = require "components"
 local newAddAndDeleteButtons = require "addAndDeleteButtons"
+local newComponentWindow = require "newComponentWindow"
 
 local gameEntities = {
   {
@@ -67,6 +68,7 @@ local gameEntities = {
     }
   }
 }
+
 local w, h = term.getSize()
 local entityListHeight = 7
 local componentListHeight = 7
@@ -113,6 +115,7 @@ local buttons = {
         componentList:removeSelected()
       end,
       function()
+        newComponentWindow.visible = true
       end),
 }
 
@@ -133,26 +136,34 @@ local function renderGame()
 end
 
 function redraw()
-  utils.renderBox(1, 1, w, h, colors.white)
-  utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
-  entityList:render()
-  componentList:render()
-  for _, button in ipairs(buttons) do
-    button:render()
-  end
+  if newComponentWindow.visible then
+    newComponentWindow:render()
+  else
+    utils.renderBox(1, 1, w, h, colors.white)
+    utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
+    entityList:render()
+    componentList:render()
+    for _, button in ipairs(buttons) do
+      button:render()
+    end
 
-  local oldTerm = term.redirect(gameWindow)
-  term.setBackgroundColor(colors.white)
-  term.clear()
-  renderGame()
-  term.redirect(oldTerm)
+    local oldTerm = term.redirect(gameWindow)
+    term.setBackgroundColor(colors.white)
+    term.clear()
+    renderGame()
+    term.redirect(oldTerm)
+  end
 end
 
 local function handleEvents(event, var1, var2, var3)
-  entityList:update(event, var1, var2, var3)
-  componentList:update(event, var1, var2, var3)
-  for _, button in ipairs(buttons) do
-    button:update(event, var1, var2, var3)
+  if newComponentWindow.visible then
+    newComponentWindow:update(event, var1, var2, var3)
+  else
+    entityList:update(event, var1, var2, var3)
+    componentList:update(event, var1, var2, var3)
+    for _, button in ipairs(buttons) do
+      button:update(event, var1, var2, var3)
+    end
   end
 end
 
