@@ -6,69 +6,7 @@ local newAddAndDeleteButtons = require "addAndDeleteButtons"
 local newComponentWindow = require "newComponentWindow"
 componentToAdd = nil
 
-local gameEntities = {
-  {
-    name = "enemy",
-    components = {
-      {
-        type = "pos",
-        args = {
-          x = 2,
-          y = 4
-        }
-      },
-      {
-        type = "sprite",
-        args = {
-          x = 10,
-          y = 4
-        }
-      }
-    }
-  },
-  {
-    name = "map",
-    components = {
-      {
-        type = "pos",
-        args = {
-          x = 2,
-          y = 4
-        }
-      },
-      {
-        type = "map",
-        args = {
-
-        }
-      }
-    }
-  },
-  {
-    name = "player",
-    components = {
-      {
-        type = "controllable",
-        args = {
-
-        }
-      },
-      {
-        type = "sprite",
-        args = {
-
-        }
-      },
-      {
-        type = "pos",
-        args = {
-          x = 10,
-          y = 10
-        }
-      }
-    }
-  }
-}
+local gameEntities = {}
 
 local w, h = term.getSize()
 local entityListHeight = 7
@@ -78,7 +16,7 @@ local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBa
 
 local componentList = newList(
     2, entityListHeight + 4, sideBarWidth - 2, componentListHeight,
-    gameEntities[1].components,
+    {},
     function(item)
       return item.type
     end,
