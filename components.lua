@@ -11,6 +11,8 @@ local template = {
   end,
   update = function(self, event, var1, var2, var3)
   end,
+  editor = function(self, event, var1, var2, var3)
+  end,
 
   needs = {
     "foo"
@@ -26,6 +28,21 @@ components.pos = {
   render = function(self)
   end,
   update = function(self, event, var1, var2, var3)
+  end,
+  editor = function(self, event, var1, var2, var3)
+    if event == "key" then
+      local k = keys.getName(var1)
+      if k == "up" then
+        self.y = self.y - 1
+      elseif k == "down" then
+        self.y = self.y + 1
+      end
+      if k == "left" then
+        self.x = self.x - 1
+      elseif k == "right" then
+        self.x = self.x + 1
+      end
+    end
   end,
 
   needs = {}
@@ -47,13 +64,15 @@ components.sprite = {
       for x = 1, #line do
         local char = string.sub(line, x, x)
         if type(char) == "string" and char ~= " " then
-          term.setCursorPos(x, y)
+          term.setCursorPos(self.x + x, self.y + y)
           term.blit(char, char, char)
         end
       end
     end
   end,
   update = function(self, event, var1, var2, var3)
+  end,
+  editor = function(self, event, var1, var2, var3)
   end,
 
   needs = {
@@ -69,6 +88,8 @@ components.map = {
     paintutils.drawFilledBox(self.x, self.y, self.x + 10, self.y + 10, colors.gray)
   end,
   update = function(self, event, var1, var2, var3)
+  end,
+  editor = function(self, event, var1, var2, var3)
   end,
 
   needs = {
@@ -87,6 +108,8 @@ components.controllable = {
   render = function(self)
   end,
   update = function(self, event, var1, var2, var3)
+  end,
+  editor = function(self, event, var1, var2, var3)
   end,
 
   needs = {

@@ -72,18 +72,21 @@ local buttons = {
       end}
 }
 
+local function getEntityVars(entity)
+  local entityVars = {}
+  for _, component in ipairs(entity.components) do
+    for k, v in pairs(component.args) do
+      entityVars[k] = v
+    end
+  end
+  return entityVars
+end
+
 local function renderGame()
   for _, entity in ipairs(gameEntities) do
-    local entityVars = {}
+    local entityVars = getEntityVars(entity)
     for _, component in ipairs(entity.components) do
-      for k, v in pairs(component.args) do
-        entityVars[k] = v
-      end
-    end
-    for _, component in ipairs(entity.components) do
-      local c = components[component.type]
-      c.render(setmetatable(entityVars, {
-          __index = c.args}))
+      components[component.type].render(setmetatable(component.args, {__index = entityVars}))
     end
   end
 end
@@ -116,6 +119,10 @@ local function handleEvents(event, var1, var2, var3)
     componentList:update(event, var1, var2, var3)
     for _, button in ipairs(buttons) do
       button:update(event, var1, var2, var3)
+    end
+    local component = componentList.items[componentList.selected]
+    if component then
+      components[component.type].editor(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
     end
   end
 end
