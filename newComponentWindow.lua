@@ -2,19 +2,22 @@ local utils = require "utils"
 local newButton = require "button"
 local components = require "components"
 local newList = require "list"
-local sw, sh = term.getSize()
 
-local title = "Choose a component"
+local sw, sh = term.getSize()
 local w = sw - 30
 local h = sh - 5
 local x = 22
 local y = 4
-
 local newComponentWindow
 
-local closeButton = newButton(x + w - 1, y, 1, 1, "x", colors.red, colors.orange, colors.white, function()
-  newComponentWindow.visible = false
-end)
+local closeButton = newButton{
+  x = x + w - 1, y = y,
+  w = 1, h = 1,
+  label = "x",
+  color = colors.red, clickedColor = colors.orange, labelColor = colors.white,
+  onClick = function()
+    newComponentWindow.visible = false
+  end}
 
 local function createComponent(type)
   local newComponent = utils.copyTable(components[type])
@@ -24,13 +27,14 @@ local function createComponent(type)
   return newComponent
 end
 
-local componentList = newList(x + 3, y + 2, w - 6, h - 3, {},
-    function(item)
+local componentList = newList({
+    x = x + 3, y = y + 2,
+    w = w - 6, h = h - 3,
+    items = {},
+    getLabel = function(item)
       return item
     end,
-    function(item)
-    end,
-    function(item)
+    onDoubleClick = function(item)
       local c = components[item]
 
       for _, need in ipairs(c.needs) do
@@ -48,7 +52,7 @@ local componentList = newList(x + 3, y + 2, w - 6, h - 3, {},
       componentList:add(createComponent(item))
 
       newComponentWindow.visible = false
-    end)
+    end})
 
 for k, v in pairs(components) do
   table.insert(componentList.items, k)
@@ -60,7 +64,7 @@ newComponentWindow = {
     utils.renderBox(x, y, w, h, colors.lightGray)
     utils.renderLine(x, y, w, 1, colors.gray)
     term.setCursorPos(x, y)
-    term.write(title)
+    term.write("Choose a component")
     componentList:render()
     closeButton:render()
   end,

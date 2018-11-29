@@ -67,7 +67,6 @@ components.map = {
 
   render = function(self)
     paintutils.drawFilledBox(self.x, self.y, self.x + 10, self.y + 10, colors.gray)
-    --paintutils.drawFilledBox(3, 3, 10, 10, colors.gray)
   end,
   update = function(self, event, var1, var2, var3)
   end,

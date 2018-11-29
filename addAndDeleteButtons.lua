@@ -1,18 +1,20 @@
 local newButton = require "button"
 
-return function(x, y, delFunction, addFunction)
-  local del = newButton(
-      x, y, 5, 1,
-      "del",
-      colors.red, colors.orange, colors.white,
-      delFunction)
-  local add = newButton(
-      x + 5, y, 5, 1,
-      "add",
-      colors.green, colors.lime, colors.white,
-      addFunction)
+return function(t)
+  local del = newButton{
+      x = t.x, y = t.y,
+      w = 5, h = 1,
+      label = "del",
+      color = colors.red, clickedColor = colors.orange, labelColor = colors.white,
+      onClick = t.del}
+  local add = newButton{
+      x = t.x + 5, y = t.y,
+      w = 5, h = 1,
+      label = "add",
+      color = colors.green, clickedColor = colors.lime, labelColor = colors.white,
+      onClick = t.add}
 
-  local this = {
+  return {
     render = function(self)
       del:render()
       add:render()
@@ -22,11 +24,4 @@ return function(x, y, delFunction, addFunction)
       add:update(event, var1, var2, var3)
     end
   }
-
-  this.x = x
-  this.y = y
-  this.delFunction = delFunction
-  this.addFunction = addFunction
-
-  return this
 end

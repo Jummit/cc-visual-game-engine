@@ -13,19 +13,14 @@ local componentListHeight = 7
 local sideBarWidth = 12
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth - 1, h)
 
-componentList = newList(
-    2, entityListHeight + 4, sideBarWidth - 2, componentListHeight,
-    {},
-    function(item)
+componentList = newList({
+    x = 2, y = entityListHeight + 4,
+    w = sideBarWidth - 2, h = componentListHeight,
+    items = {},
+    getLabel = function(item)
       return item.type
     end,
-    function(item)
-      -- on select
-    end,
-    function(item)
-      -- on double click
-    end,
-    function(components, toDelete)
+    shouldDelete = function(components, toDelete)
       for _, c in ipairs(components.items) do
         for _, need in ipairs(c.needs) do
           if toDelete.type == need then
@@ -34,46 +29,47 @@ componentList = newList(
         end
       end
       return true
-    end)
+    end})
 
-entityList = newList(
-    2, 2, sideBarWidth - 2, entityListHeight,
-    gameEntities,
-    function(item)
+entityList = newList({
+    x = 2, y = 2,
+    w = sideBarWidth - 2, h = entityListHeight,
+    items = gameEntities,
+    getLabel = function(item)
       return item.name
     end,
-    function(item)
+    onItemSelected = function(item)
       componentList.items = item.components
       componentList:select(1)
     end,
-    function(item)
+    onDoubleClick = function(item)
       term.setCursorPos(entityList.x, entityList.y + entityList.selected - 1)
       term.setBackgroundColor(colors.gray)
       term.setTextColor(colors.white)
       entityList.items[entityList.selected].name = io.read()
-    end)
+    end})
 
 local buttons = {
-  newAddAndDeleteButtons(
-      2, entityListHeight + 2,
-      function()
-        componentList:clear()
+  newAddAndDeleteButtons{
+      x = 2, y = entityListHeight + 2,
+      del = function()
+        componentList.items = {}
         entityList:removeSelected()
       end,
-      function()
+      add = function()
         entityList:add({
           name = "new",
           components = {}
         })
-      end),
-  newAddAndDeleteButtons(
-      2, entityListHeight + componentListHeight + 4,
-      function()
+      end},
+  newAddAndDeleteButtons{
+      x = 2, y = entityListHeight + componentListHeight + 4,
+      del = function()
         componentList:removeSelected()
       end,
-      function()
+      add = function()
         newComponentWindow.visible = true
-      end),
+      end}
 }
 
 local function renderGame()
