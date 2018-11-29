@@ -74,6 +74,10 @@ local buttons = {
   newMoveButtons{
     x = 6, y = entityListHeight + 2,
     list = entityList
+  },
+  newMoveButtons{
+    x = 6, y = entityListHeight + componentListHeight + 4,
+    list = componentList
   }
 }
 
@@ -107,6 +111,8 @@ function redraw()
     for _, button in ipairs(buttons) do
       button:render()
     end
+    utils.printCenter(2, 1, sideBarWidth - 2, 1, "Entities", colors.lightGray)
+    utils.printCenter(2, entityListHeight + 3, sideBarWidth - 2, 1, "Components", colors.lightGray)
 
     local oldTerm = term.redirect(gameWindow)
     term.setBackgroundColor(colors.white)

@@ -8,6 +8,13 @@ function utils.renderLine(x, y, dx, dy, color)
   paintutils.drawLine(x, y, x + dx - 1, y + dy - 1, color)
 end
 
+function utils.renderText(x, y, t, color, backgroundColor)
+  term.setTextColor(color)
+  term.setBackgroundColor(backgroundColor)
+  term.setCursorPos(x, y)
+  term.write(t)
+end
+
 function utils.pointInBox(x, y, w, h, px, py)
   return px >= x and py >= y and px < x + w and py < y + h
 end
@@ -18,7 +25,10 @@ function utils.clearTable(t)
   end
 end
 
-function utils.printCenter(x, y, w, h, text)
+function utils.printCenter(x, y, w, h, text, backgroundColor)
+  if backgroundColor then
+    term.setBackgroundColor(backgroundColor)
+  end
   term.setCursorPos(
       x + w / 2 - #text / 2,
       y + h / 2)
