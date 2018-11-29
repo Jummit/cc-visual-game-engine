@@ -5,9 +5,10 @@ local components = require "components"
 local newAddAndDeleteButtons = require "addAndDeleteButtons"
 local newMoveButtons = require "moveButtons"
 local newComponentWindow = require "newComponentWindow"
+local windowUtils = require "window"
 
 local gameEntities = {}
-
+local localWindow = nil
 local w, h = term.getSize()
 local entityListHeight = 7
 local componentListHeight = 7
@@ -69,7 +70,7 @@ local buttons = {
         componentList:removeSelected()
       end,
       add = function()
-        newComponentWindow.visible = true
+        localWindow = newComponentWindow
       end},
   newMoveButtons{
     x = 6, y = entityListHeight + 2,
@@ -101,8 +102,8 @@ local function renderGame()
 end
 
 function redraw()
-  if newComponentWindow.visible then
-    newComponentWindow:render()
+  if localWindow then
+    windowUtils.render(localWindow)
   else
     utils.renderBox(1, 1, w, h, colors.white)
     utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
@@ -123,8 +124,10 @@ function redraw()
 end
 
 local function handleEvents(event, var1, var2, var3)
-  if newComponentWindow.visible then
-    newComponentWindow:update(event, var1, var2, var3)
+  if localWindow then
+    if windowUtils.update(localWindow, event, var1, var2, var3) then
+      localWindow = nil
+    end
   else
     entityList:update(event, var1, var2, var3)
     componentList:update(event, var1, var2, var3)
