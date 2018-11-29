@@ -1,18 +1,18 @@
 local newButton = require "button"
 
 return function(t)
-  local del = newButton{
-      x = t.x, y = t.y,
-      w = 5, h = 1,
-      label = "del",
-      color = colors.red, clickedColor = colors.orange, labelColor = colors.white,
-      onClick = t.del}
   local add = newButton{
-      x = t.x + 5, y = t.y,
-      w = 5, h = 1,
-      label = "add",
+      x = t.x, y = t.y,
+      w = 3, h = 1,
+      label = "+",
       color = colors.green, clickedColor = colors.lime, labelColor = colors.white,
       onClick = t.add}
+  local del = newButton{
+      x = t.x + 3, y = t.y,
+      w = 1, h = 1,
+      label = "-",
+      color = colors.red, clickedColor = colors.orange, labelColor = colors.white,
+      onClick = t.del}
 
   return {
     render = function(self)
