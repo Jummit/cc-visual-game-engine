@@ -20,7 +20,7 @@ end
 
 function utils.printCenter(x, y, w, h, text)
   term.setCursorPos(
-      x + w - #text * 1.5 + 1,
+      x + w / 2 - #text / 2,
       y + h / 2)
   term.write(text)
 end
