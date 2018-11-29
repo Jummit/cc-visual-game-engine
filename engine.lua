@@ -11,7 +11,7 @@ local gameEntities = {}
 local w, h = term.getSize()
 local entityListHeight = 7
 local componentListHeight = 7
-local sideBarWidth = 13
+local sideBarWidth = 12
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth - 1, h)
 
 componentList = newList({
@@ -74,10 +74,6 @@ local buttons = {
   newMoveButtons{
     x = 6, y = entityListHeight + 2,
     list = entityList
-  },
-  newMoveButtons{
-    x = 6, y = entityListHeight + componentListHeight + 4,
-    list = componentList
   }
 }
 

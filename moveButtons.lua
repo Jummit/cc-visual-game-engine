@@ -20,10 +20,10 @@ return function(t)
     x = t.x, y = t.y,
     w = 3, h = 1,
     label = "^",
-    color = colors.gray, clickedColor = colors.cyan,
+    color = colors.blue, clickedColor = colors.cyan,
     labelColor = colors.white,
     onClick = function()
-      if t.list.selected > 1 then
+      if t.list.selected and t.list.selected > 1 then
         moveListItems(t, function(n, item, selected, selectedItem)
               if n == selected - 1 then
                 table.insert(t.list.items, selectedItem)
@@ -35,13 +35,13 @@ return function(t)
     end
   }
   local down = newButton{
-    x = t.x + 4, y = t.y,
+    x = t.x + 3, y = t.y,
     w = 3, h = 1,
     label = "v",
-    color = colors.gray, clickedColor = colors.cyan,
+    color = colors.cyan, clickedColor = colors.lightBlue,
     labelColor = colors.white,
     onClick = function()
-      if t.list.selected < #t.list.items then
+      if t.list.selected and t.list.selected < #t.list.items then
         moveListItems(t, function(n, item, selected, selectedItem)
               table.insert(t.list.items, item)
               if n == selected then
