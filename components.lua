@@ -82,14 +82,53 @@ components.sprite = {
 
 components.map = {
   args = {
+    tiles = {},
+    tileset = {
+      {
+        bc = colors.blue,
+        tc = colors.lightBlue,
+        char = "~"
+      },
+      {
+        bc = colors.green,
+        tc = colors.green,
+        char = " "
+      }
+    }
   },
 
   render = function(self)
-    paintutils.drawFilledBox(self.x, self.y, self.x + 10, self.y + 10, colors.gray)
+    for x = 1, #self.tiles do
+      for y = 1, #self.tiles[x] do
+        term.setCursorPos(self.x + x - 1, self.y + y - 1)
+        local tile = self.tileset[self.tiles[x][y]]
+        term.setBackgroundColor(tile.bc)
+        term.setTextColor(tile.tc)
+        term.write(tile.char)
+      end
+    end
   end,
   update = function(self, event, var1, var2, var3)
   end,
   editor = function(self, event, var1, var2, var3)
+    if #self.tiles == 0 then
+      for x = 1, 10 do
+        self.tiles[x] = {}
+        for y = 1, 10 do
+          self.tiles[x][y] = 1
+        end
+      end
+    end
+    if event == "mouse_click" or event == "mouse_drag" then
+      local x = var2 - self.x + 1
+      local y = var3 - self.y + 1
+      if x > 0 and y > 0 and x <= #self.tiles and y <= #self.tiles[1] then
+        if not self.tiles[x] then
+          self.tiles[x] = {}
+        end
+        self.tiles[x][y] = 2
+      end
+    end
   end,
 
   needs = {

@@ -134,9 +134,16 @@ local function handleEvents(event, var1, var2, var3)
     for _, button in ipairs(buttons) do
       button:update(event, var1, var2, var3)
     end
-    local component = componentList.items[componentList.selected]
-    if component then
-      components[component.type].editor(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
+    if entityList.selected then
+      local event, var1, var2, var3 = event, var1, var2, var3
+      if event == "mouse_click" or event == "mouse_up" or event == "mouse_drag" then
+        var2 = var2 - sideBarWidth
+      end
+      local component = componentList.items[componentList.selected]
+      local entityVars = getEntityVars(entityList.items[entityList.selected])
+      if component then
+        components[component.type].editor(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
+      end
     end
   end
 end
