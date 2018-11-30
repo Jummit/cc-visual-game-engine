@@ -1,4 +1,6 @@
 local success, message = pcall(function()
+local buffer = window.create(term.current(), 1, 1, term.getSize())
+local oldTerm = term.redirect(buffer)
 local newList = require "list"
 local utils = require "utils"
 local components = require "components"
@@ -149,7 +151,9 @@ local function handleEvents(event, var1, var2, var3)
 end
 
 while true do
+  buffer.setVisible(false)
   redraw()
+  buffer.setVisible(true)
   local event, var1, var2, var3 = os.pullEvent()
   handleEvents(event, var1, var2, var3)
 end

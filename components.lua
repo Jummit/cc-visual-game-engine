@@ -128,9 +128,9 @@ components.map = {
   end,
   editor = function(self, event, var1, var2, var3)
     if #self.tiles == 0 then
-      for x = 1, 10 do
+      for x = 1, 50 do
         self.tiles[x] = {}
-        for y = 1, 10 do
+        for y = 1, 50 do
           self.tiles[x][y] = 1
         end
       end
