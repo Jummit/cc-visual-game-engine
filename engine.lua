@@ -16,7 +16,7 @@ local localWindow = nil
 local entityListHeight = 7
 local componentListHeight = 7
 local sideBarWidth = 12
-local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth - 1, h)
+local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
 
 componentList = newList({
     x = 2, y = entityListHeight + 4,
@@ -90,7 +90,7 @@ local buttons = {
     list = componentList
   },
   newButton{
-      x = w - 4, y = 1,
+      x = w - 3, y = 1,
       w = 4, h = 1,
       label = "save",
       labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
