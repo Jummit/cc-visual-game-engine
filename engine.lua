@@ -1,3 +1,6 @@
+local args = {...}
+local gameName = args[1]
+local gameSave = "saves/"..gameName..".game"
 local success, message = pcall(function()
 local w, h = term.getSize()
 local buffer = window.create(term.current(), 1, 1, w, h)
@@ -55,7 +58,7 @@ entityList = newList({
     end})
 
 local function saveGame()
-  local file = io.open("saves/test.game", "w")
+  local file = io.open(gameSave, "w")
   file:write(textutils.serialize(gameEntities))
   file:close()
 end
@@ -149,12 +152,14 @@ local buttons = {
 }
 
 local function loadGame()
-  local file = fs.open("saves/test.game", "r")
-  local loadEntities = textutils.unserialize(file.readAll())
-  for k, v in pairs(loadEntities) do
-    gameEntities[k] = utils.copyTable(v)
+  if fs.exists(gameSave) then
+    local file = fs.open(gameSave, "r")
+    local loadEntities = textutils.unserialize(file.readAll())
+    for k, v in pairs(loadEntities) do
+      gameEntities[k] = utils.copyTable(v)
+    end
+    file.close()
   end
-  file.close()
 end
 
 function redraw()
