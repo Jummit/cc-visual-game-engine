@@ -163,6 +163,20 @@ components.controllable = {
   render = function(self)
   end,
   update = function(self, event, var1, var2, var3)
+    if event == "key" then
+      local k = keys.getName(var1)
+      if k == self.up then
+        self.y = self.y - 1
+      elseif k == self.down then
+        self.y = self.y + 1
+      end
+
+      if k == self.left then
+        self.x = self.x - 1
+      elseif k == self.right then
+        self.x = self.x + 1
+      end
+    end
   end,
   editor = function(self, event, var1, var2, var3)
   end,

@@ -60,6 +60,50 @@ local function saveGame()
   file:close()
 end
 
+local function getEntityVars(entity)
+  local entityVars = {}
+  for _, component in ipairs(entity.components) do
+    for k, v in pairs(component.args) do
+      entityVars[k] = v
+    end
+  end
+  return entityVars
+end
+
+local function renderGame(entities)
+  term.setBackgroundColor(colors.white)
+  term.clear()
+  for _, entity in ipairs(entities) do
+    local entityVars = getEntityVars(entity)
+    for _, component in ipairs(entity.components) do
+      components[component.type].render(setmetatable(component.args, {__index = entityVars}))
+    end
+  end
+end
+
+local function updateGame(entities)
+  local event, var1, var2, var3 = os.pullEvent()
+  for _, entity in ipairs(entities) do
+    local entityVars = getEntityVars(entity)
+    for _, component in ipairs(entity.components) do
+      components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
+    end
+  end
+end
+
+local function runGame()
+  local entities = utils.copyTable(gameEntities)
+  local gameTerm = window.create(term.current(), 1, 1, w, h)
+  local oldTerm = term.redirect(gameTerm)
+  while true do
+    gameTerm.setVisible(false)
+    renderGame(entities)
+    gameTerm.setVisible(true)
+    updateGame(entities)
+  end
+  term.redirect(oldTerm)
+end
+
 local buttons = {
   newAddAndDeleteButtons{
       x = 2, y = entityListHeight + 1,
@@ -94,7 +138,14 @@ local buttons = {
       w = 4, h = 1,
       label = "save",
       labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
-      onClick = saveGame,}
+      onClick = saveGame},
+  newButton{
+      x = w - 3, y = 2,
+      w = 3, h = 1,
+      label = "run",
+      labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
+      onClick = runGame},
+
 }
 
 local function loadGame()
@@ -104,25 +155,6 @@ local function loadGame()
     gameEntities[k] = utils.copyTable(v)
   end
   file.close()
-end
-
-local function getEntityVars(entity)
-  local entityVars = {}
-  for _, component in ipairs(entity.components) do
-    for k, v in pairs(component.args) do
-      entityVars[k] = v
-    end
-  end
-  return entityVars
-end
-
-local function renderGame()
-  for _, entity in ipairs(gameEntities) do
-    local entityVars = getEntityVars(entity)
-    for _, component in ipairs(entity.components) do
-      components[component.type].render(setmetatable(component.args, {__index = entityVars}))
-    end
-  end
 end
 
 function redraw()
@@ -139,9 +171,7 @@ function redraw()
     utils.printCenter(2, entityListHeight + componentListHeight + 4, sideBarWidth - 2, 1, "Components", colors.white, colors.lightGray)
 
     local oldTerm = term.redirect(gameWindow)
-    term.setBackgroundColor(colors.white)
-    term.clear()
-    renderGame()
+    renderGame(gameEntities)
     term.redirect(oldTerm)
 
     for _, button in ipairs(buttons) do
