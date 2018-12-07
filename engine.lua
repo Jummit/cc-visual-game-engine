@@ -84,6 +84,21 @@ local buttons = {
   }
 }
 
+function loadGame()
+  local file = fs.open("saves/test.game", "r")
+  local loadEntities = textutils.unserialize(file.readAll())
+  for k, v in pairs(loadEntities) do
+    gameEntities[k] = utils.copyTable(v)
+  end
+  file.close()
+end
+
+function saveGame()
+  local file = io.open("saves/test.game", "w")
+  file:write(textutils.serialize(gameEntities))
+  file:close()
+end
+
 local function getEntityVars(entity)
   local entityVars = {}
   for _, component in ipairs(entity.components) do
@@ -150,6 +165,7 @@ local function handleEvents(event, var1, var2, var3)
   end
 end
 
+loadGame()
 while true do
   buffer.setVisible(false)
   redraw()

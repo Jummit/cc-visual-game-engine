@@ -9,6 +9,7 @@ local function createComponent(type)
   newComponent.type = type
   newComponent.render = nil
   newComponent.update = nil
+  newComponent.editor = nil
   return newComponent
 end
 
