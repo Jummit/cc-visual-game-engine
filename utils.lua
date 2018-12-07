@@ -25,8 +25,8 @@ function utils.clearTable(t)
   end
 end
 
-function utils.printCenter(x, y, w, h, text, backgroundColor)
-  term.setTextColor(colors.white)
+function utils.printCenter(x, y, w, h, text, textColor, backgroundColor)
+  term.setTextColor(textColor)
   if backgroundColor then
     term.setBackgroundColor(backgroundColor)
   end

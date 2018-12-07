@@ -13,7 +13,7 @@ return {
     utils.renderBox(x - 1, y + 1, w, h, colors.black)
     utils.renderBox(x, y, w, h, colors.lightGray)
     utils.renderLine(x, y, w, 1, colors.gray)
-    utils.printCenter(x, y, w, 1, window.title, colors.gray)
+    utils.printCenter(x, y, w, 1, window.title, colors.white, colors.gray)
     utils.renderText(x + w - 1, y, "x", colors.white, colors.red)
 
     window:render(x + 2, y + 2, w - 4, h - 4)

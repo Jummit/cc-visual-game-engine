@@ -1,7 +1,9 @@
 local success, message = pcall(function()
-local buffer = window.create(term.current(), 1, 1, term.getSize())
+local w, h = term.getSize()
+local buffer = window.create(term.current(), 1, 1, w, h)
 local oldTerm = term.redirect(buffer)
 local newList = require "list"
+local newButton = require "button"
 local utils = require "utils"
 local components = require "components"
 local newAddAndDeleteButtons = require "addAndDeleteButtons"
@@ -11,7 +13,6 @@ local windowUtils = require "window"
 
 local gameEntities = {}
 local localWindow = nil
-local w, h = term.getSize()
 local entityListHeight = 7
 local componentListHeight = 7
 local sideBarWidth = 12
@@ -53,9 +54,15 @@ entityList = newList({
       entityList.items[entityList.selected].name = io.read()
     end})
 
+local function saveGame()
+  local file = io.open("saves/test.game", "w")
+  file:write(textutils.serialize(gameEntities))
+  file:close()
+end
+
 local buttons = {
   newAddAndDeleteButtons{
-      x = 2, y = entityListHeight + 2,
+      x = 2, y = entityListHeight + 1,
       del = function()
         componentList.items = {}
         entityList:removeSelected()
@@ -67,7 +74,7 @@ local buttons = {
         })
       end},
   newAddAndDeleteButtons{
-      x = 2, y = entityListHeight + componentListHeight + 4,
+      x = 2, y = entityListHeight + componentListHeight + 3,
       del = function()
         componentList:removeSelected()
       end,
@@ -75,28 +82,28 @@ local buttons = {
         localWindow = newComponentWindow
       end},
   newMoveButtons{
-    x = 6, y = entityListHeight + 2,
+    x = 6, y = entityListHeight + 1,
     list = entityList
   },
   newMoveButtons{
-    x = 6, y = entityListHeight + componentListHeight + 4,
+    x = 6, y = entityListHeight + componentListHeight + 3,
     list = componentList
-  }
+  },
+  newButton{
+      x = w - 4, y = 1,
+      w = 4, h = 1,
+      label = "save",
+      labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
+      onClick = saveGame,}
 }
 
-function loadGame()
+local function loadGame()
   local file = fs.open("saves/test.game", "r")
   local loadEntities = textutils.unserialize(file.readAll())
   for k, v in pairs(loadEntities) do
     gameEntities[k] = utils.copyTable(v)
   end
   file.close()
-end
-
-function saveGame()
-  local file = io.open("saves/test.game", "w")
-  file:write(textutils.serialize(gameEntities))
-  file:close()
 end
 
 local function getEntityVars(entity)
@@ -126,17 +133,20 @@ function redraw()
     utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
     entityList:render()
     componentList:render()
-    for _, button in ipairs(buttons) do
-      button:render()
-    end
-    utils.printCenter(2, 1, sideBarWidth - 2, 1, "Entities", colors.lightGray)
-    utils.printCenter(2, entityListHeight + 3, sideBarWidth - 2, 1, "Components", colors.lightGray)
+    --utils.printCenter(2, 1, sideBarWidth - 2, 1, "Entities", colors.lightGray)
+    utils.printCenter(2, entityListHeight + 2, sideBarWidth - 2, 1, "Entities", colors.white, colors.lightGray)
+    --utils.printCenter(2, entityListHeight + 3, sideBarWidth - 2, 1, "Components", colors.lightGray)
+    utils.printCenter(2, entityListHeight + componentListHeight + 4, sideBarWidth - 2, 1, "Components", colors.white, colors.lightGray)
 
     local oldTerm = term.redirect(gameWindow)
     term.setBackgroundColor(colors.white)
     term.clear()
     renderGame()
     term.redirect(oldTerm)
+
+    for _, button in ipairs(buttons) do
+      button:render()
+    end
   end
 end
 
@@ -175,11 +185,16 @@ while true do
 end
 end)
 
+local w, h = term.getSize()
+local t = window.create(term.native(), 1, 1, w, h)
+term.redirect(t)
+term.setTextColor(colors.white)
 term.setBackgroundColor(colors.black)
 term.clear()
-term.setCursorPos(1, 1)
+term.setCursorPos(1, 2)
 
 if not success then
   term.setTextColor(colors.orange)
   print(message)
 end
+t:redraw()

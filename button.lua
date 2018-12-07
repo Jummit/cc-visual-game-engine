@@ -4,8 +4,7 @@ return function(t)
   return setmetatable(t, {__index = {
     render = function(self)
       utils.renderBox(self.x, self.y, self.w, self.h, (self.pressed and self.clickedColor) or self.color)
-      term.setTextColor(self.labelColor)
-      utils.printCenter(self.x, self.y, self.w, self.h, self.label)
+      utils.printCenter(self.x, self.y, self.w, self.h, self.label, self.labelColor, term.getBackgroundColor())
     end,
     update = function(self, event, var1, var2, var3)
       if event == "mouse_click" then
