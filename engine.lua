@@ -1,8 +1,11 @@
+local w, h = term.getSize()
+local t = window.create(term.current(), 1, 1, w, h)
+local oldTerm = term.redirect(t)
 local args = {...}
+
+local success, message = pcall(function()
 local gameName = args[1]
 local gameSave = "saves/"..gameName..".game"
-local success, message = pcall(function()
-local w, h = term.getSize()
 local buffer = window.create(term.current(), 1, 1, w, h)
 local oldTerm = term.redirect(buffer)
 local newList = require "list"
@@ -95,14 +98,15 @@ local function updateGame(entities)
 end
 
 local function runGame()
-  local entities = utils.copyTable(gameEntities)
+  local e = utils.copyTable(gameEntities)
   local gameTerm = window.create(term.current(), 1, 1, w, h)
   local oldTerm = term.redirect(gameTerm)
+  entities = gameEntities
   while true do
     gameTerm.setVisible(false)
-    renderGame(entities)
+    renderGame(e)
     gameTerm.setVisible(true)
-    updateGame(entities)
+    updateGame(e)
   end
   term.redirect(oldTerm)
 end
@@ -220,13 +224,12 @@ while true do
 end
 end)
 
-local w, h = term.getSize()
-local t = window.create(term.native(), 1, 1, w, h)
-term.redirect(t)
+t.setVisible(false)
+term.redirect(oldTerm)
 term.setTextColor(colors.white)
 term.setBackgroundColor(colors.black)
 term.clear()
-term.setCursorPos(1, 2)
+term.setCursorPos(1, 1)
 
 if not success then
   term.setTextColor(colors.orange)
