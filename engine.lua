@@ -27,6 +27,7 @@ local newComponentWindow = require "ui.newComponentWindow"
 local windowUtils = require "ui.window"
 local gameSave = require "utils.gameSave"
 local entityUtils = require "utils.entity"
+local game = require "utils.game"
 
 -- variables
 local gameEntities = gameSave.load(saveFile) or {}
@@ -69,46 +70,7 @@ entityList = newList({
       entityList.items[entityList.selected].name = io.read()
     end})
 
--- functions
-local function renderGame(entities, inEditor)
-  term.setBackgroundColor(colors.white)
-  term.clear()
-  for n, entity in ipairs(entities) do
-    local entityVars = entityUtils.getVars(entity)
-    for i, component in ipairs(entity.components) do
-      setmetatable(component.args, {__index = entityVars})
-      components[component.type].render(component.args)
-      if n == entityList.selected and i == componentList.selected and inEditor then
-        components[component.type].editorRender(component.args)
-      end
-    end
-  end
-end
-
-local function updateGame(entities)
-  local event, var1, var2, var3 = os.pullEvent()
-  for _, entity in ipairs(entities) do
-    local entityVars = entityUtils.getVars(entity)
-    for _, component in ipairs(entity.components) do
-      components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
-    end
-  end
-end
-
-local function runGame()
-  local e = tableUtils.copy(gameEntities)
-  local gameTerm = window.create(term.current(), 1, 1, w, h)
-  local oldTerm = term.redirect(gameTerm)
-  entities = gameEntities
-  while true do
-    gameTerm.setVisible(false)
-    renderGame(e)
-    gameTerm.setVisible(true)
-    updateGame(e)
-  end
-  term.redirect(oldTerm)
-end
-
+-- buttons
 local buttons = {
   newAddAndDeleteButtons{
       x = 2, y = entityListHeight + 1,
@@ -151,8 +113,9 @@ local buttons = {
       w = 3, h = 1,
       label = "run",
       labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
-      onClick = runGame},
-
+      onClick = function()
+        game.run(gameEntities)
+      end},
 }
 
 function redraw()
@@ -161,15 +124,15 @@ function redraw()
   else
     draw.box(1, 1, w, h, colors.white)
     draw.box(1, 1, sideBarWidth, h, colors.lightGray)
+
     entityList:render()
     componentList:render()
-    --utils.printCenter(2, 1, sideBarWidth - 2, 1, "Entities", colors.lightGray)
+
     draw.center(2, entityListHeight + 2, sideBarWidth - 2, 1, "Entities", colors.white, colors.lightGray)
-    --utils.printCenter(2, entityListHeight + 3, sideBarWidth - 2, 1, "Components", colors.lightGray)
     draw.center(2, entityListHeight + componentListHeight + 4, sideBarWidth - 2, 1, "Components", colors.white, colors.lightGray)
 
     local oldTerm = term.redirect(gameWindow)
-    renderGame(gameEntities, true)
+    game.render(gameEntities, entityList, componentList, true)
     term.redirect(oldTerm)
 
     for _, button in ipairs(buttons) do
