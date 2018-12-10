@@ -5,7 +5,6 @@ require("utils.runSave")(function()
 local gameName = args[1]
 local saveFile = "saves/"..gameName..".game"
 local w, h = term.getSize()
-
 local entityListHeight = 7
 local componentListHeight = 7
 local sideBarWidth = 12
@@ -27,6 +26,7 @@ local newMoveButtons = require "ui.buttons.move"
 local newComponentWindow = require "ui.newComponentWindow"
 local windowUtils = require "ui.window"
 local gameSave = require "utils.gameSave"
+local entityUtils = require "utils.entity"
 
 -- variables
 local gameEntities = gameSave.load(saveFile) or {}
@@ -70,21 +70,11 @@ entityList = newList({
     end})
 
 -- functions
-local function getEntityVars(entity)
-  local entityVars = {}
-  for _, component in ipairs(entity.components) do
-    for k, v in pairs(component.args) do
-      entityVars[k] = v
-    end
-  end
-  return entityVars
-end
-
 local function renderGame(entities, inEditor)
   term.setBackgroundColor(colors.white)
   term.clear()
   for n, entity in ipairs(entities) do
-    local entityVars = getEntityVars(entity)
+    local entityVars = entityUtils.getVars(entity)
     for i, component in ipairs(entity.components) do
       setmetatable(component.args, {__index = entityVars})
       components[component.type].render(component.args)
@@ -98,7 +88,7 @@ end
 local function updateGame(entities)
   local event, var1, var2, var3 = os.pullEvent()
   for _, entity in ipairs(entities) do
-    local entityVars = getEntityVars(entity)
+    local entityVars = entityUtils.getVars(entity)
     for _, component in ipairs(entity.components) do
       components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
     end
@@ -205,7 +195,7 @@ local function handleEvents(event, var1, var2, var3)
         var2 = var2 - sideBarWidth
       end
       local component = componentList.items[componentList.selected]
-      local entityVars = getEntityVars(entityList.items[entityList.selected])
+      local entityVars = entityUtils.getVars(entityList.items[entityList.selected])
       if component then
         components[component.type].editor(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
       end
