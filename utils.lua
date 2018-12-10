@@ -16,6 +16,7 @@ function utils.renderText(x, y, t, color, backgroundColor)
 end
 
 function utils.pointInBox(x, y, w, h, px, py)
+  --utils.renderBox(x, y, w, h, colors.orange)
   return px >= x and py >= y and px < x + w and py < y + h
 end
 

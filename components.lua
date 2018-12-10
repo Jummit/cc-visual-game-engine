@@ -16,6 +16,8 @@ local template = {
   end,
   editor = function(self, event, var1, var2, var3)
   end,
+  editorRender = function(self)
+  end,
 
   needs = {
     "foo"
@@ -47,6 +49,8 @@ components.pos = {
       end
     end
   end,
+  editorRender = function(self)
+  end,
 
   needs = {}
 }
@@ -61,11 +65,6 @@ components.sprite = {
       for y, color in pairs(row) do
         paintutils.drawPixel(self.x + x - 1, self.y + y - 1, color)
       end
-    end
-
-    utils.renderText(self.x, self.y, "+", colors.lightGray, colors.white)
-    if self.showTools then
-      colorRadialMenu.render(self.clickedX, self.clickedY)
     end
   end,
   update = function(self, event, var1, var2, var3)
@@ -88,6 +87,12 @@ components.sprite = {
         end
         self.texture[x][y] = self.drawColor
       end
+    end
+  end,
+  editorRender = function(self)
+    utils.renderText(self.x, self.y, "+", colors.lightGray, colors.white)
+    if self.showTools then
+      colorRadialMenu.render(self.clickedX, self.clickedY)
     end
   end,
 
@@ -126,14 +131,6 @@ components.map = {
         drawTile(self.x + x - 1, self.y + y - 1, self.tileset[self.tiles[x][y]])
       end
     end
-
-    for i, tile in ipairs(self.tileset) do
-      drawTile(i * 2, 1, tile)
-      drawTile(i * 2, 2, tile)
-      drawTile(i * 2 - 1, 1, tile)
-      drawTile(i * 2 - 1, 2, tile)
-    end
-    utils.renderText(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
   end,
   update = function(self, event, var1, var2, var3)
   end,
@@ -180,6 +177,15 @@ components.map = {
       end
     end
   end,
+  editorRender = function(self)
+    for i, tile in ipairs(self.tileset) do
+      drawTile(i * 2, 1, tile)
+      drawTile(i * 2, 2, tile)
+      drawTile(i * 2 - 1, 1, tile)
+      drawTile(i * 2 - 1, 2, tile)
+    end
+    utils.renderText(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
+  end,
 
   needs = {
     "pos"
@@ -213,6 +219,8 @@ components.controllable = {
     end
   end,
   editor = function(self, event, var1, var2, var3)
+  end,
+  editorRender = function(self)
   end,
 
   needs = {

@@ -76,13 +76,17 @@ local function getEntityVars(entity)
   return entityVars
 end
 
-local function renderGame(entities)
+local function renderGame(entities, inEditor)
   term.setBackgroundColor(colors.white)
   term.clear()
-  for _, entity in ipairs(entities) do
+  for n, entity in ipairs(entities) do
     local entityVars = getEntityVars(entity)
-    for _, component in ipairs(entity.components) do
-      components[component.type].render(setmetatable(component.args, {__index = entityVars}))
+    for i, component in ipairs(entity.components) do
+      setmetatable(component.args, {__index = entityVars})
+      components[component.type].render(component.args)
+      if n == entityList.selected and i == componentList.selected and inEditor then
+        components[component.type].editorRender(component.args)
+      end
     end
   end
 end
@@ -180,7 +184,7 @@ function redraw()
     utils.printCenter(2, entityListHeight + componentListHeight + 4, sideBarWidth - 2, 1, "Components", colors.white, colors.lightGray)
 
     local oldTerm = term.redirect(gameWindow)
-    renderGame(gameEntities)
+    renderGame(gameEntities, true)
     term.redirect(oldTerm)
 
     for _, button in ipairs(buttons) do
