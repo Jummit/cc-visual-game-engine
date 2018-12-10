@@ -50,6 +50,7 @@ components.pos = {
     end
   end,
   editorRender = function(self)
+    utils.renderText(self.x, self.y, "+", colors.lightGray, colors.white)
   end,
 
   needs = {}
@@ -90,7 +91,6 @@ components.sprite = {
     end
   end,
   editorRender = function(self)
-    utils.renderText(self.x, self.y, "+", colors.lightGray, colors.white)
     if self.showTools then
       colorRadialMenu.render(self.clickedX, self.clickedY)
     end
