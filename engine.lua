@@ -1,11 +1,21 @@
 local args = {...}
 
 require("utils.runSave")(function()
+-- constants
 local gameName = args[1]
+local saveFile = "saves/"..gameName..".game"
 local w, h = term.getSize()
-local gameSave = "saves/"..gameName..".game"
-local buffer = window.create(term.current(), 1, 1, w, h)
+
+local entityListHeight = 7
+local componentListHeight = 7
+local sideBarWidth = 12
+
+-- buffer and game window
+local buffer = window.create(term.current(), 1, 1, w, w)
 local oldTerm = term.redirect(buffer)
+local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
+
+-- libraries
 local newList = require "ui.list"
 local newButton = require "ui.button"
 local draw = require "utils.draw"
@@ -16,14 +26,13 @@ local newAddAndDeleteButtons = require "ui.buttons.addAndDelete"
 local newMoveButtons = require "ui.buttons.move"
 local newComponentWindow = require "ui.newComponentWindow"
 local windowUtils = require "ui.window"
+local gameSave = require "utils.gameSave"
 
-local gameEntities = {}
+-- variables
+local gameEntities = gameSave.load(saveFile) or {}
 local localWindow = nil
-local entityListHeight = 7
-local componentListHeight = 7
-local sideBarWidth = 12
-local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
 
+-- lists
 componentList = newList({
     x = 2, y = entityListHeight + 4,
     w = sideBarWidth - 2, h = componentListHeight,
@@ -60,12 +69,7 @@ entityList = newList({
       entityList.items[entityList.selected].name = io.read()
     end})
 
-local function saveGame()
-  local file = io.open(gameSave, "w")
-  file:write(textutils.serialize(gameEntities))
-  file:close()
-end
-
+-- functions
 local function getEntityVars(entity)
   local entityVars = {}
   for _, component in ipairs(entity.components) do
@@ -149,7 +153,9 @@ local buttons = {
       w = 4, h = 1,
       label = "save",
       labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
-      onClick = saveGame},
+      onClick = function()
+        gameSave.save(saveFile, gameEntities)
+      end},
   newButton{
       x = w - 3, y = 2,
       w = 3, h = 1,
@@ -158,17 +164,6 @@ local buttons = {
       onClick = runGame},
 
 }
-
-local function loadGame()
-  if fs.exists(gameSave) then
-    local file = fs.open(gameSave, "r")
-    local loadEntities = textutils.unserialize(file.readAll())
-    for k, v in pairs(loadEntities) do
-      gameEntities[k] = tableUtils.copy(v)
-    end
-    file.close()
-  end
-end
 
 function redraw()
   if localWindow then
@@ -218,7 +213,6 @@ local function handleEvents(event, var1, var2, var3)
   end
 end
 
-loadGame()
 while true do
   buffer.setVisible(false)
   redraw()
