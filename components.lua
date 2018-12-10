@@ -1,7 +1,8 @@
 local components = {}
-local newButton = require "button"
-local utils = require "utils"
-local colorRadialMenu = require "colorRadialMenu"
+local newButton = require "ui.button"
+local draw = require "utils.draw"
+local mathUtils = require "utils.math"
+local colorRadialMenu = require "ui.colorRadialMenu"
 
 local template = {
   args = {
@@ -50,7 +51,7 @@ components.pos = {
     end
   end,
   editorRender = function(self)
-    utils.renderText(self.x, self.y, "+", colors.lightGray, colors.white)
+    draw.text(self.x, self.y, "+", colors.lightGray, colors.white)
   end,
 
   needs = {}
@@ -146,7 +147,7 @@ components.map = {
     if event == "mouse_click" or event == "mouse_drag" then
       local didSelectTile = false
       for i, tile in ipairs(self.tileset) do
-        if utils.pointInBox(i * 2 - 1, 1, 2, 2, var2, var3) then
+        if mathUtils.pointInBox(i * 2 - 1, 1, 2, 2, var2, var3) then
           if var1 == 1 then
             self.selectedTile = i
           elseif var1 == 2 then
@@ -184,7 +185,7 @@ components.map = {
       drawTile(i * 2 - 1, 1, tile)
       drawTile(i * 2 - 1, 2, tile)
     end
-    utils.renderText(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
+    draw.text(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
   end,
 
   needs = {

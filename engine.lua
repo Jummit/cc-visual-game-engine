@@ -8,14 +8,16 @@ local gameName = args[1]
 local gameSave = "saves/"..gameName..".game"
 local buffer = window.create(term.current(), 1, 1, w, h)
 local oldTerm = term.redirect(buffer)
-local newList = require "list"
-local newButton = require "button"
-local utils = require "utils"
+local newList = require "ui.list"
+local newButton = require "ui.button"
+local draw = require "utils.draw"
+local mathUtils = require "utils.math"
+local tableUtils = require "utils.table"
 local components = require "components"
-local newAddAndDeleteButtons = require "addAndDeleteButtons"
-local newMoveButtons = require "moveButtons"
-local newComponentWindow = require "newComponentWindow"
-local windowUtils = require "window"
+local newAddAndDeleteButtons = require "ui.buttons.addAndDelete"
+local newMoveButtons = require "ui.buttons.move"
+local newComponentWindow = require "ui.newComponentWindow"
+local windowUtils = require "ui.window"
 
 local gameEntities = {}
 local localWindow = nil
@@ -102,7 +104,7 @@ local function updateGame(entities)
 end
 
 local function runGame()
-  local e = utils.copyTable(gameEntities)
+  local e = tableUtils.copy(gameEntities)
   local gameTerm = window.create(term.current(), 1, 1, w, h)
   local oldTerm = term.redirect(gameTerm)
   entities = gameEntities
@@ -164,7 +166,7 @@ local function loadGame()
     local file = fs.open(gameSave, "r")
     local loadEntities = textutils.unserialize(file.readAll())
     for k, v in pairs(loadEntities) do
-      gameEntities[k] = utils.copyTable(v)
+      gameEntities[k] = tableUtils.copy(v)
     end
     file.close()
   end
@@ -174,14 +176,14 @@ function redraw()
   if localWindow then
     windowUtils.render(localWindow)
   else
-    utils.renderBox(1, 1, w, h, colors.white)
-    utils.renderBox(1, 1, sideBarWidth, h, colors.lightGray)
+    draw.box(1, 1, w, h, colors.white)
+    draw.box(1, 1, sideBarWidth, h, colors.lightGray)
     entityList:render()
     componentList:render()
     --utils.printCenter(2, 1, sideBarWidth - 2, 1, "Entities", colors.lightGray)
-    utils.printCenter(2, entityListHeight + 2, sideBarWidth - 2, 1, "Entities", colors.white, colors.lightGray)
+    draw.center(2, entityListHeight + 2, sideBarWidth - 2, 1, "Entities", colors.white, colors.lightGray)
     --utils.printCenter(2, entityListHeight + 3, sideBarWidth - 2, 1, "Components", colors.lightGray)
-    utils.printCenter(2, entityListHeight + componentListHeight + 4, sideBarWidth - 2, 1, "Components", colors.white, colors.lightGray)
+    draw.center(2, entityListHeight + componentListHeight + 4, sideBarWidth - 2, 1, "Components", colors.white, colors.lightGray)
 
     local oldTerm = term.redirect(gameWindow)
     renderGame(gameEntities, true)

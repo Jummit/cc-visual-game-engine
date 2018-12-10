@@ -1,11 +1,11 @@
-local utils = require "utils"
+local tableUtils = require "utils.table"
 local components = require "components"
-local newList = require "list"
+local newList = require "ui.list"
 
 local close = false
 
 local function createComponent(type)
-  local newComponent = utils.copyTable(components[type])
+  local newComponent = tableUtils.copy(components[type])
   newComponent.type = type
   newComponent.render = nil
   newComponent.update = nil

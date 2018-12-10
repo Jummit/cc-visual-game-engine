@@ -1,4 +1,4 @@
-local newButton = require "button"
+local newButton = require "ui.button"
 
 return function(t)
   local add = newButton{

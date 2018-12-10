@@ -1,9 +1,10 @@
-local utils = require "utils"
+local draw = require "utils.draw"
+local mathUtils = require "utils.math"
 
 return function(t)
   return setmetatable(t, {__index = {
     render = function(self)
-      utils.renderBox(self.x, self.y, self.w, self.h, colors.gray)
+      draw.box(self.x, self.y, self.w, self.h, colors.gray)
 
       for i, item in ipairs(self.items) do
         if i == self.selected then
@@ -19,7 +20,7 @@ return function(t)
     update = function(self, event, var1, var2, var3)
       if event == "mouse_click" then
         local clickedItem = var3 - self.y + 1
-        if utils.pointInBox(self.x, self.y, self.w, self.h, var2, var3) and #self.items >= clickedItem then
+        if mathUtils.pointInBox(self.x, self.y, self.w, self.h, var2, var3) and #self.items >= clickedItem then
           if self.selected == clickedItem then
             self.onDoubleClick(self.items[self.selected])
           else

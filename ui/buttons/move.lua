@@ -1,13 +1,13 @@
-local utils = require "utils"
-local newButton = require "button"
+local tableUtils = require "utils.table"
+local newButton = require "ui.button"
 
 local function moveListItems(t, f)
-  local items = utils.copyTable(t.list.items)
+  local items = tableUtils.copy(t.list.items)
   local selected = t.list.selected
   local selectedItem = items[selected]
   if selectedItem then
     table.remove(items, selected)
-    utils.clearTable(t.list.items)
+    tableUtils.clear(t.list.items)
 
     for n, item in ipairs(items) do
       f(n, item, selected, selectedItem)

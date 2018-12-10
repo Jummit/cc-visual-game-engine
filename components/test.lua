@@ -5,6 +5,8 @@ return {
 
   render = function(self)
     term.setCursorPos(self.x, self.y)
+    term.setBackgroundColor(colors.white)
+    term.setTextColor(colors.gray)
     term.write(self.test)
   end,
   update = function(self, event, var1, var2, var3)
@@ -13,7 +15,7 @@ return {
     end
   end,
   editor = function(self, event, var1, var2, var3)
-    update(self, event, var1, var2, var3)
+    --update(self, event, var1, var2, var3)
   end,
 
   needs = {

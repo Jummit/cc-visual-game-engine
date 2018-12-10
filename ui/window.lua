@@ -1,4 +1,4 @@
-local utils = require "utils"
+local draw = require "utils.draw"
 
 local sw, sh = term.getSize()
 local xm, ym = 10, 2
@@ -10,11 +10,11 @@ local h = sh - ym * 2
 
 return {
   render = function(window)
-    utils.renderBox(x - 1, y + 1, w, h, colors.black)
-    utils.renderBox(x, y, w, h, colors.lightGray)
-    utils.renderLine(x, y, w, 1, colors.gray)
-    utils.printCenter(x, y, w, 1, window.title, colors.white, colors.gray)
-    utils.renderText(x + w - 1, y, "x", colors.white, colors.red)
+    draw.box(x - 1, y + 1, w, h, colors.black)
+    draw.box(x, y, w, h, colors.lightGray)
+    draw.line(x, y, w, 1, colors.gray)
+    draw.center(x, y, w, 1, window.title, colors.white, colors.gray)
+    draw.text(x + w - 1, y, "x", colors.white, colors.red)
 
     window:render(x + 2, y + 2, w - 4, h - 4)
   end,
