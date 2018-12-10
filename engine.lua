@@ -1,10 +1,8 @@
-local w, h = term.getSize()
-local t = window.create(term.current(), 1, 1, w, h)
-local oldTerm = term.redirect(t)
 local args = {...}
 
-local success, message = pcall(function()
+require("utils.runSave")(function()
 local gameName = args[1]
+local w, h = term.getSize()
 local gameSave = "saves/"..gameName..".game"
 local buffer = window.create(term.current(), 1, 1, w, h)
 local oldTerm = term.redirect(buffer)
@@ -229,16 +227,3 @@ while true do
   handleEvents(event, var1, var2, var3)
 end
 end)
-
-t.setVisible(false)
-term.redirect(oldTerm)
-term.setTextColor(colors.white)
-term.setBackgroundColor(colors.black)
-term.clear()
-term.setCursorPos(1, 1)
-
-if not success then
-  term.setTextColor(colors.orange)
-  print(message)
-end
-t:redraw()
