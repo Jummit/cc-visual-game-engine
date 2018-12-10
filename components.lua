@@ -96,6 +96,13 @@ components.sprite = {
   }
 }
 
+local function drawTile(x, y, tile)
+  term.setCursorPos(x, y)
+  term.setBackgroundColor(tile.bc)
+  term.setTextColor(tile.tc)
+  term.write(tile.char)
+end
+
 components.map = {
   args = {
     tiles = {},
@@ -116,13 +123,17 @@ components.map = {
   render = function(self)
     for x = 1, #self.tiles do
       for y = 1, #self.tiles[x] do
-        term.setCursorPos(self.x + x - 1, self.y + y - 1)
-        local tile = self.tileset[self.tiles[x][y]]
-        term.setBackgroundColor(tile.bc)
-        term.setTextColor(tile.tc)
-        term.write(tile.char)
+        drawTile(self.x + x - 1, self.y + y - 1, self.tileset[self.tiles[x][y]])
       end
     end
+
+    for i, tile in ipairs(self.tileset) do
+      drawTile(i * 2, 1, tile)
+      drawTile(i * 2, 2, tile)
+      drawTile(i * 2 - 1, 1, tile)
+      drawTile(i * 2 - 1, 2, tile)
+    end
+    utils.renderText(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
   end,
   update = function(self, event, var1, var2, var3)
   end,
@@ -136,13 +147,36 @@ components.map = {
       end
     end
     if event == "mouse_click" or event == "mouse_drag" then
-      local x = var2 - self.x + 1
-      local y = var3 - self.y + 1
-      if x > 0 and y > 0 and x <= #self.tiles and y <= #self.tiles[1] then
-        if not self.tiles[x] then
-          self.tiles[x] = {}
+      local didSelectTile = false
+      for i, tile in ipairs(self.tileset) do
+        if utils.pointInBox(i * 2 - 1, 1, 2, 2, var2, var3) then
+          if var1 == 1 then
+            self.selectedTile = i
+          elseif var1 == 2 then
+
+          else
+            table.remove(self.tileset, i)
+          end
+          didSelectTile = true
         end
-        self.tiles[x][y] = 2
+      end
+      if var2 == #self.tileset * 2 + 1 and var3 == 1 then
+        didSelectTile = true
+        table.insert(self.tileset, {
+          tc = colors.magenta,
+          bc = colors.black,
+          char = "\153"
+        })
+      end
+      if not didSelectTile then
+        local x = var2 - self.x + 1
+        local y = var3 - self.y + 1
+        if self.selectedTile and x > 0 and y > 0 and x <= #self.tiles and y <= #self.tiles[1] then
+          if not self.tiles[x] then
+            self.tiles[x] = {}
+          end
+          self.tiles[x][y] = self.selectedTile
+        end
       end
     end
   end,
