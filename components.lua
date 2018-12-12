@@ -65,7 +65,11 @@ components.sprite = {
   render = function(self)
     for x, row in pairs(self.texture) do
       for y, color in pairs(row) do
-        paintutils.drawPixel(self.x + x - 1, self.y + y - 1, color)
+        if x == 1 and y == 1 then
+          draw.text(self.x, self.y, "·", colors.lightGray, color)
+        else
+          paintutils.drawPixel(self.x + x - 1, self.y + y - 1, color)
+        end
       end
     end
   end,
@@ -92,6 +96,9 @@ components.sprite = {
     end
   end,
   editorRender = function(self)
+    if not (self.texture[1] and self.texture[1][1]) then
+      draw.text(self.x, self.y, "·", colors.lightGray, colors.white)
+    end
     if self.showTools then
       colorRadialMenu.render(self.clickedX, self.clickedY)
     end
