@@ -32,18 +32,19 @@ function game.update(entities)
 end
 
 function game.run(gameEntities)
-  local e = tableUtils.copy(gameEntities)
+  Entities = tableUtils.copy(gameEntities)
   local gameTerm = window.create(term.current(), 1, 1, term.getSize())
   local oldTerm = term.redirect(gameTerm)
-  entities = gameEntities
 
   os.startTimer(0)
   while true do
     gameTerm.setVisible(false)
-    game.render(e)
+    game.render(Entities)
     gameTerm.setVisible(true)
-    game.update(e)
+    game.update(Entities)
   end
+
+  Entities = nil
   term.redirect(oldTerm)
 end
 
