@@ -38,14 +38,14 @@ components.pos = {
   editor = function(self, event, var1, var2, var3)
     if event == "key" then
       local k = keys.getName(var1)
-      if k == "up" then
+      if k == "up" or k == "w" then
         self.y = self.y - 1
-      elseif k == "down" then
+      elseif k == "down" or k == "s" then
         self.y = self.y + 1
       end
-      if k == "left" then
+      if k == "left" or k == "a" then
         self.x = self.x - 1
-      elseif k == "right" then
+      elseif k == "right" or k == "d" then
         self.x = self.x + 1
       end
     end
