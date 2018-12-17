@@ -31,7 +31,7 @@ local game = require "utils.game"
 
 -- variables
 local gameEntities = gameSave.load(saveFile) or {}
-Keyboard = {}
+Keyboard = require "keyboard"
 LocalWindow = nil
 
 -- lists
@@ -143,6 +143,11 @@ function redraw()
 end
 
 local function handleEvents(event, var1, var2, var3)
+  if event == "timer" then
+    os.startTimer(0)
+  end
+  
+  Keyboard:update(event, var1, var2, var3)
   if LocalWindow then
     if windowUtils.update(LocalWindow, event, var1, var2, var3) then
       LocalWindow = nil
@@ -167,6 +172,7 @@ local function handleEvents(event, var1, var2, var3)
   end
 end
 
+os.startTimer(0)
 while true do
   buffer.setVisible(false)
   redraw()

@@ -20,14 +20,7 @@ end
 
 function game.update(entities)
   local event, var1, var2, var3 = os.pullEvent()
-  if event == "key" then
-    Keyboard[keys.getName(var1)] = true
-  elseif event == "char" then
-    Keyboard[var1] = true
-  elseif event == "key_up" then
-    Keyboard[keys.getName(var1)] = false
-  end
-
+  Keyboard:update(event, var1, var2, var3)
   if event == "timer" then
     os.startTimer(0)
   end

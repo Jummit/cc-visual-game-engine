@@ -11,18 +11,15 @@ return {
   update = function(self, event, var1, var2, var3)
   end,
   editor = function(self, event, var1, var2, var3)
-    if event == "key" then
-      local k = keys.getName(var1)
-      if k == "up" or k == "w" then
-        self.y = self.y - 1
-      elseif k == "down" or k == "s" then
-        self.y = self.y + 1
-      end
-      if k == "left" or k == "a" then
-        self.x = self.x - 1
-      elseif k == "right" or k == "d" then
-        self.x = self.x + 1
-      end
+    if Keyboard.up or Keyboard.w then
+      self.y = self.y - 1
+    elseif Keyboard.down or Keyboard.s then
+      self.y = self.y + 1
+    end
+    if Keyboard.left or Keyboard.a then
+      self.x = self.x - 1
+    elseif Keyboard.right or Keyboard.d then
+      self.x = self.x + 1
     end
   end,
   editorRender = function(self)
