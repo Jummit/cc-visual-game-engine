@@ -122,7 +122,7 @@ return {
             self.selectedTile = i
           elseif var1 == 2 then
             mapWindow.tile = self.tileset[i]
-            localWindow = mapWindow
+            LocalWindow = mapWindow
           else
             table.remove(self.tileset, i)
           end

@@ -31,7 +31,8 @@ local game = require "utils.game"
 
 -- variables
 local gameEntities = gameSave.load(saveFile) or {}
-localWindow = nil
+Keyboard = {}
+LocalWindow = nil
 
 -- lists
 componentList = newList({
@@ -90,7 +91,7 @@ local buttons = {
         componentList:removeSelected()
       end,
       add = function()
-        localWindow = newComponentWindow
+        LocalWindow = newComponentWindow
       end},
   newMoveButtons{
     x = 6, y = entityListHeight + 1,
@@ -119,8 +120,8 @@ local buttons = {
 }
 
 function redraw()
-  if localWindow then
-    windowUtils.render(localWindow)
+  if LocalWindow then
+    windowUtils.render(LocalWindow)
   else
     draw.box(1, 1, w, h, colors.white)
     draw.box(1, 1, sideBarWidth, h, colors.lightGray)
@@ -142,9 +143,9 @@ function redraw()
 end
 
 local function handleEvents(event, var1, var2, var3)
-  if localWindow then
-    if windowUtils.update(localWindow, event, var1, var2, var3) then
-      localWindow = nil
+  if LocalWindow then
+    if windowUtils.update(LocalWindow, event, var1, var2, var3) then
+      LocalWindow = nil
     end
   else
     entityList:update(event, var1, var2, var3)
