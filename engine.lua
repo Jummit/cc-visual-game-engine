@@ -31,7 +31,7 @@ local game = require "utils.game"
 
 -- variables
 local gameEntities = gameSave.load(saveFile) or {}
-local localWindow = nil
+localWindow = nil
 
 -- lists
 componentList = newList({

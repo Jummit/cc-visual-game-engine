@@ -11,12 +11,12 @@ return function(t)
       if event == "mouse_click" then
         if mathUtils.pointInBox(self.x, self.y, self.w, self.h, var2, var3) then
           self.pressed = true
-          self.onClick()
+          self:onClick()
         end
       elseif event == "mouse_up" then
         self.pressed = false
       end
     end,
-    onClick = function() end,
+    onClick = function(self) end,
   }})
 end

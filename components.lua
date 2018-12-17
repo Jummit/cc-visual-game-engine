@@ -4,6 +4,7 @@ local newButton = require "ui.button"
 local draw = require "utils.draw"
 local mathUtils = require "utils.math"
 local colorRadialMenu = require "ui.colorRadialMenu"
+local window = require "ui.window"
 
 local template = {
   args = {
@@ -115,6 +116,70 @@ local function drawTile(x, y, tile)
   term.write(tile.char)
 end
 
+local showTileEditorColorWheel = false
+local tileEditorColorWheelParam
+local mapButtons = {
+  newButton{
+    x = 12, y = 5, w = 16, h = 3,
+    label = "Edit Character",
+    color = colors.gray, labelColor = colors.lightGray,
+    clickedColor = colors.white,
+    onClick = function(self)
+      _, self.tile.char = os.pullEvent("char")
+    end
+  },
+  newButton{
+    x = 12, y = 9, w = 16, h = 3,
+    label = "Edit Color",
+    color = colors.gray, labelColor = colors.lightGray,
+    clickedColor = colors.white,
+    onClick = function(self)
+      tileEditorColorWheelParam = "bc"
+      showTileEditorColorWheel = true
+    end
+  },
+  newButton{
+    x = 12, y = 13, w = 16, h = 3,
+    label = "Edit Text Color",
+    color = colors.gray, labelColor = colors.lightGray,
+    clickedColor = colors.white,
+    onClick = function(self)
+      tileEditorColorWheelParam = "tc"
+      showTileEditorColorWheel = true
+    end
+  }
+}
+local mapWindow = {
+  tile = nil,
+  render = function(self, x, y, w, h)
+    local tx, ty = x + 18, y + 3
+    for x = 1, 5 do
+      for y = 1, 4 do
+        drawTile(tx + x, ty + y, self.tile)
+      end
+    end
+    for _, button in ipairs(mapButtons) do
+      button:render()
+    end
+    if showTileEditorColorWheel then
+      colorRadialMenu.render(35, 10)
+    end
+  end,
+  update = function(self, event, var1, var2, var3)
+    for _, button in ipairs(mapButtons) do
+      button.tile = self.tile
+      button:update(event, var1, var2, var3)
+    end
+    if showTileEditorColorWheel then
+      local c = colorRadialMenu.update(35, 10, event, var1, var2, var3)
+      if c then
+        showTileEditorColorWheel = false
+        self.tile[tileEditorColorWheelParam] = c
+      end
+    end
+  end,
+  title = "Tile editor"
+}
 components.map = {
   args = {
     tiles = {},
@@ -150,6 +215,7 @@ components.map = {
         end
       end
     end
+
     if event == "mouse_click" or event == "mouse_drag" then
       local didSelectTile = false
       for i, tile in ipairs(self.tileset) do
@@ -157,7 +223,8 @@ components.map = {
           if var1 == 1 then
             self.selectedTile = i
           elseif var1 == 2 then
-
+            mapWindow.tile = self.tileset[i]
+            localWindow = mapWindow
           else
             table.remove(self.tileset, i)
           end
