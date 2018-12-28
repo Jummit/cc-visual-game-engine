@@ -5,7 +5,7 @@ return function(t)
   return setmetatable(t, {__index = {
     render = function(self)
       draw.box(self.x, self.y, self.w, self.h, (self.pressed and self.clickedColor) or self.color)
-      draw.center(self.x, self.y, self.w, self.h, self.label, self.labelColor, term.getBackgroundColor())
+      draw.centerText(self.x, self.y, self.w, self.h, self.label, self.labelColor, term.getBackgroundColor())
     end,
     update = function(self, event, var1, var2, var3)
       if event == "mouse_click" then

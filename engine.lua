@@ -101,8 +101,8 @@ uiElements = {
         componentList:removeSelected()
       end,
       add = function()
-        ui[1] = newComponentWindow
-        ui[1].visible = true
+        uiElements[1] = ui.newComponentWindow
+        uiElements[1].visible = true
       end},
   ui.buttons.move{
     x = 6, y = entityListHeight + 1,

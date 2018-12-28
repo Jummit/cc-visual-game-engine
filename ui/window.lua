@@ -17,7 +17,7 @@ return function(t)
         draw.box(x - 1, y + 1, w, h, colors.black)
         draw.box(x, y, w, h, colors.lightGray)
         draw.line(x, y, w, 1, colors.gray)
-        --draw.center(x, y, w, 1, window.title, colors.white, colors.gray)
+        draw.centerText(x, y, w, 1, self.title, colors.white, colors.gray)
         draw.text(x + w - 1, y, "x", colors.white, colors.red)
 
         t.render(self, x + 2, y + 2, w - 4, h - 4)
