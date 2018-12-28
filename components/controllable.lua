@@ -28,8 +28,8 @@ return {
       move.x = 1
     end
 
-    self.x = self.x + move.x
-    self.y = self.y + move.y
+    self.x = self.x + move.x/2
+    self.y = self.y + move.y/2
 
     if self.shape then
       local collided = false
