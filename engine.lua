@@ -148,7 +148,7 @@ end
 
 local function updateComponentInEditor(component, event, var1, var2, var3)
   -- calculate mouse position
-  if event:sub(1, #"mouse" + 1) == "mouse" then
+  if event:sub(1, #"mouse") == "mouse" then
     var2 = var2 - sideBarWidth
   end
 
