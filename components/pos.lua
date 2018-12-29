@@ -1,4 +1,5 @@
 local draw = require "utils.draw"
+local keyboard = require "keyboard"
 
 return {
   args = {
@@ -11,14 +12,16 @@ return {
   update = function(self, event, var1, var2, var3)
   end,
   editor = function(self, event, var1, var2, var3)
-    if Keyboard.up or Keyboard.w then
+    keyboard:update(event, var1, var2, var3)
+
+    if keyboard.up or keyboard.w then
       self.y = self.y - 1
-    elseif Keyboard.down or Keyboard.s then
+    elseif keyboard.down or keyboard.s then
       self.y = self.y + 1
     end
-    if Keyboard.left or Keyboard.a then
+    if keyboard.left or keyboard.a then
       self.x = self.x - 1
-    elseif Keyboard.right or Keyboard.d then
+    elseif keyboard.right or keyboard.d then
       self.x = self.x + 1
     end
   end,

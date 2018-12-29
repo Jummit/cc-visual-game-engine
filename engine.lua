@@ -1,8 +1,7 @@
 local args = {...}
-
 require("utils.runSave")(function()
--- constants
-local gameName = args[1]
+-- variables
+local gameName = args[1] or "helloworld"
 local saveFile = "saves/"..gameName..".game"
 local w, h = term.getSize()
 local entityListHeight = 7
@@ -16,11 +15,12 @@ local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBa
 
 -- libraries
 local components = require "components"
-local tableUtils = require "utils.table"
-local ui = tableUtils.fromFiles("ui")
-local utils = tableUtils.fromFiles("utils")
+local utils = require("utils.table").fromFiles("utils")
+local ui = utils.table.fromFiles("ui")
+
+-- load the game
 local gameEntities = utils.gameSave.load(saveFile) or {}
-Keyboard = require "keyboard"
+local keyboard = require "keyboard"
 
 -- lists
 componentList = ui.list({
@@ -158,11 +158,11 @@ local function updateComponentInEditor(component, event, var1, var2, var3)
 end
 
 local function handleEvents(event, var1, var2, var3)
-  if event == "timer" then
+--[[  if event == "timer" then
     os.startTimer(0)
-  end
+  end]]
 
-  Keyboard:update(event, var1, var2, var3)
+  keyboard:update(event, var1, var2, var3)
 
   -- update window if it is visible
   if uiElements[1].visible then
