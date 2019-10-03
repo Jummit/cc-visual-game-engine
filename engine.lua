@@ -13,6 +13,7 @@ local utils = require("utils.table").fromFiles("utils")
 local ui = utils.table.fromFiles("ui")
 
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
+local runningGameWindow = window.create(gameWindow, 1, 1, w - sideBarWidth, h)
 local gameEntities = utils.gameSave.load(saveFile) or {}
 local keyboard = require "keyboard"
 
@@ -110,7 +111,21 @@ local uiElements = {
       label = "run",
       labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
       onClick = function()
-        utils.game.run(gameEntities)
+        local runningGameEntities = utils.table.copy(gameEntities)
+        local oldTerm = term.redirect(runningGameWindow)
+        
+        os.startTimer(0)
+        while true do
+          runningGameWindow.setVisible(false)
+          utils.game.render(runningGameEntities)
+          runningGameWindow.setVisible(true)
+          if utils.game.update(runningGameEntities) then
+            runningGameWindow.setVisible(false)
+            break
+          end
+        end
+
+        term.redirect(oldTerm)
       end},
   ui.newComponentWindow
 }

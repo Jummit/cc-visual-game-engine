@@ -19,32 +19,19 @@ function game.render(entities, entityList, componentList, inEditor)
 end
 
 function game.update(entities)
+  local event, var1, var2, var3 = os.pullEvent()
+  if event == "key" and keys.getName(var1) == "q" then
+    return true
+  end
   if event == "timer" then
-    os.startTimer(.05)
-    for _, entity in ipairs(entities) do
-      local entityVars = entityUtils.getVars(entity)
-      for _, component in ipairs(entity.components) do
-        components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
-      end
+    os.startTimer(0)
+  end
+  for _, entity in ipairs(entities) do
+    local entityVars = entityUtils.getVars(entity)
+    for _, component in ipairs(entity.components) do
+      components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
     end
   end
-end
-
-function game.run(gameEntities)
-  Entities = tableUtils.copy(gameEntities)
-  local gameTerm = window.create(term.current(), 1, 1, term.getSize())
-  local oldTerm = term.redirect(gameTerm)
-
-  os.startTimer(0)
-  while true do
-    gameTerm.setVisible(false)
-    game.render(Entities)
-    gameTerm.setVisible(true)
-    game.update(Entities)
-  end
-
-  Entities = nil
-  term.redirect(oldTerm)
 end
 
 return game
