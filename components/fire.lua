@@ -28,7 +28,7 @@ return {
       paintutils.drawPixel(self.x + p.x, self.y + p.y, colorFlow[p.state])
     end
   end,
-  update = function(self, event, var1, var2, var3)
+  update = function(self, event, var1, var2, var3, entities, keyboard, delta)
     if math.random(1, 5) then
       table.insert(self.particles, newParticle())
     end
