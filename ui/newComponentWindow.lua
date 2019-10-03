@@ -4,6 +4,7 @@ local newList = require "ui.list"
 local newWindow = require "ui.window"
 
 local newComponentList
+local shouldClose
 
 local function createComponent(type)
   local newComponent = tableUtils.copy(components[type])
@@ -37,28 +38,28 @@ local componentList = newList({
       end
 
       componentList:add(createComponent(item))
-      newComponentList.hidden = true
+      shouldClose = true
     end})
 
 for k, v in pairs(components) do
   table.insert(componentList.items, k)
 end
 
-newComponentList = newWindow{
-  visible = true,
-  title = "Choose a component",
-  render = function(self, x, y, w, h)
-    componentList.x = x
-    componentList.y = y
-    componentList.w = w
-    componentList.h = h
-    componentList:render()
-  end,
-  update = function(self, event, var1, var2, var3)
-    componentList:update(event, var1, var2, var3)
-  end
-}
-
-newComponentList.hidden = true
-
-return newComponentList
+return function()
+  shouldClose = false
+  return newWindow{
+    visible = true,
+    title = "Choose a component",
+    render = function(self, x, y, w, h)
+      componentList.x = x
+      componentList.y = y
+      componentList.w = w
+      componentList.h = h
+      componentList:render()
+    end,
+    update = function(self, event, var1, var2, var3)
+      componentList:update(event, var1, var2, var3)
+      return shouldClose
+    end
+  }
+end

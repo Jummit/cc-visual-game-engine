@@ -22,9 +22,9 @@ return function(t)
     end,
     update = function(self, event, var1, var2, var3)
       if event == "mouse_click" and var2 == w + x - 1 and var3 == y then
-        self.hidden = true
+        return true
       else
-        t.update(self, event, var1, var2, var3)
+        return t.update(self, event, var1, var2, var3)
       end
     end
   }

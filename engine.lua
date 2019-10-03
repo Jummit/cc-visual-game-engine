@@ -12,6 +12,7 @@ local components = require "components"
 local utils = require("utils.table").fromFiles("utils")
 local ui = utils.table.fromFiles("ui")
 
+local currentWindow
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
 local runningGameWindow = window.create(gameWindow, 1, 1, w - sideBarWidth, h)
 local gameEntities = utils.gameSave.load(saveFile) or {}
@@ -88,8 +89,7 @@ local uiElements = {
         componentList:removeSelected()
       end,
       add = function()
-        ui.newComponentWindow.hidden = false
-        ui.newComponentWindow.visible = true
+        currentWindow = ui.newComponentWindow()
       end},
   ui.buttons.move{
       x = 6, y = entityListHeight + 1,
@@ -126,8 +126,7 @@ local uiElements = {
         end
 
         term.redirect(oldTerm)
-      end},
-  ui.newComponentWindow
+      end}
 }
 
 local function updateComponentInEditor(component, event, var1, var2, var3)
@@ -136,34 +135,46 @@ local function updateComponentInEditor(component, event, var1, var2, var3)
     var2 = var2 - sideBarWidth
   end
 
-  -- update component
   setmetatable(component.args, {__index = utils.entity.getVars(entityList:getSelected())})
-  components[component.type].editor(component.args, event, var1, var2, var3)
+  local newWindow = components[component.type].editor(component.args, event, var1, var2, var3)
+  if newWindow then
+    currentWindow = newWindow
+  end
 end
 
 local function updateEditor(event, var1, var2, var3)
   keyboard:update(event, var1, var2, var3)
 
-  for _, element in pairs(uiElements) do
-    if not element.hidden then
-      element:update(event, var1, var2, var3)
+  if currentWindow then
+    if currentWindow:update(event, var1, var2, var3) then
+      currentWindow = nil
     end
-  end
-
-  if componentList:getSelected() then
-    updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
+  else
+    for _, element in pairs(uiElements) do
+      if not element.hidden then
+        element:update(event, var1, var2, var3)
+      end
+    end
+    
+    if componentList:getSelected() then
+      updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
+    end
   end
 end
 
 local function drawEditor()
-  local oldTerm = term.redirect(gameWindow)
-  utils.game.render(gameEntities, entityList, componentList, true)
-  term.redirect(oldTerm)
-
-  for _, element in pairs(uiElements) do
-    if not element.hidden then
-      element:render()
+  if currentWindow then
+    currentWindow:render()
+  else
+    for _, element in pairs(uiElements) do
+      if not element.hidden then
+        element:render()
+      end
     end
+
+    local oldTerm = term.redirect(gameWindow)
+    utils.game.render(gameEntities, entityList, componentList, true)
+    term.redirect(oldTerm)
   end
 end
 

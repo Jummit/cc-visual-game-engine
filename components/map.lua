@@ -46,7 +46,7 @@ local mapButtons = {
   }
 }
 
-local mapWindow = {
+local mapWindow = window{
   tile = nil,
   render = function(self, x, y, w, h)
     local tx, ty = x + 18, y + 3
@@ -122,7 +122,7 @@ return {
             self.selectedTile = i
           elseif var1 == 2 then
             mapWindow.tile = self.tileset[i]
-            LocalWindow = mapWindow
+            return mapWindow
           else
             table.remove(self.tileset, i)
           end
