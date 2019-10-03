@@ -42,6 +42,12 @@ function game.update(entities, lastUpdate)
 end
 
 function game.run(entities, runningGameWindow)
+  for id, entity in ipairs(entities) do
+    for _, component in ipairs(entity.components) do
+      component.args.id = id
+    end
+  end
+
   log.clear()
   local oldTerm = term.redirect(runningGameWindow)
   os.startTimer(1)
