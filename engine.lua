@@ -1,28 +1,21 @@
 local args = {...}
 require("utils.runSave")(function()
--- variables
 local gameName = args[1] or "helloworld"
 local saveFile = "saves/"..gameName..".game"
 local w, h = term.getSize()
+
 local entityListHeight = 7
 local componentListHeight = 7
 local sideBarWidth = 12
 
--- buffer and game window
-local buffer = window.create(term.current(), 1, 1, w, w)
-local oldTerm = term.redirect(buffer)
-local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
-
--- libraries
 local components = require "components"
 local utils = require("utils.table").fromFiles("utils")
 local ui = utils.table.fromFiles("ui")
 
--- load the game
+local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
 local gameEntities = utils.gameSave.load(saveFile) or {}
 local keyboard = require "keyboard"
 
--- lists
 componentList = ui.list({
     x = 2, y = entityListHeight + 4,
     w = sideBarWidth - 2, h = componentListHeight,
@@ -59,26 +52,19 @@ entityList = ui.list({
       entityList.items[entityList.selected].name = io.read()
     end})
 
--- ui
-local uiElements
-uiElements = {
-  {
-    render = function() end,
-    update = function() end,
-    visible = false
-  },
+local uiElements = {
   ui.box{
       x = 1, y = 1,
       w = sideBarWidth, h = h,
       color = colors.lightGray},
-  entityList,
+      entityList,
   componentList,
   ui.centerText{
       x = 2, y = entityListHeight + 2,
       w = sideBarWidth - 2, h = 1,
       text = "Entities",
       textColor = colors.white, backgroundColor = colors.lightGray},
-  ui.centerText{
+      ui.centerText{
       x = 2, y = entityListHeight + componentListHeight + 4,
       w = sideBarWidth - 2, h = 1,
       text = "Components",
@@ -101,17 +87,15 @@ uiElements = {
         componentList:removeSelected()
       end,
       add = function()
-        uiElements[1] = ui.newComponentWindow
-        uiElements[1].visible = true
+        ui.newComponentWindow.hidden = false
+        ui.newComponentWindow.visible = true
       end},
   ui.buttons.move{
-    x = 6, y = entityListHeight + 1,
-    list = entityList
-  },
+      x = 6, y = entityListHeight + 1,
+      list = entityList},
   ui.buttons.move{
-    x = 6, y = entityListHeight + componentListHeight + 3,
-    list = componentList
-  },
+      x = 6, y = entityListHeight + componentListHeight + 3,
+      list = componentList},
   ui.button{
       x = w - 3, y = 1,
       w = 4, h = 1,
@@ -127,24 +111,9 @@ uiElements = {
       labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
       onClick = function()
         utils.game.run(gameEntities)
-      end}
+      end},
+  ui.newComponentWindow
 }
-
-function redraw()
-  if uiElements[1].visible then
-    uiElements[1]:render()
-  else
-    -- draw game window
-    local oldTerm = term.redirect(gameWindow)
-    utils.game.render(gameEntities, entityList, componentList, true)
-    term.redirect(oldTerm)
-
-    -- draw ui elements
-    for _, element in ipairs(uiElements) do
-      element:render()
-    end
-  end
-end
 
 local function updateComponentInEditor(component, event, var1, var2, var3)
   -- calculate mouse position
@@ -157,36 +126,37 @@ local function updateComponentInEditor(component, event, var1, var2, var3)
   components[component.type].editor(component.args, event, var1, var2, var3)
 end
 
-local function handleEvents(event, var1, var2, var3)
---[[  if event == "timer" then
-    os.startTimer(0)
-  end]]
-
+local function updateEditor(event, var1, var2, var3)
   keyboard:update(event, var1, var2, var3)
 
-  -- update window if it is visible
-  if uiElements[1].visible then
-    uiElements[1]:update(event, var1, var2, var3)
-  else
-    -- update ui
-    for _, element in ipairs(uiElements) do
+  for _, element in pairs(uiElements) do
+    if not element.hidden then
       element:update(event, var1, var2, var3)
     end
+  end
 
-    -- update the selected component if there is one
-    local component = componentList.items[componentList.selected]
-    if component then
-      updateComponentInEditor(component, event, var1, var2, var3)
+  local component = componentList.items[componentList.selected]
+  if component then
+    updateComponentInEditor(component, event, var1, var2, var3)
+  end
+end
+
+local function drawEditor()
+  local oldTerm = term.redirect(gameWindow)
+  utils.game.render(gameEntities, entityList, componentList, true)
+  term.redirect(oldTerm)
+
+  for _, element in pairs(uiElements) do
+    if not element.hidden then
+      element:render()
     end
   end
 end
 
 os.startTimer(0)
 while true do
-  buffer.setVisible(false)
-  redraw()
-  buffer.setVisible(true)
+  drawEditor()
   local event, var1, var2, var3 = os.pullEvent()
-  handleEvents(event, var1, var2, var3)
+  updateEditor(event, var1, var2, var3)
 end
 end)
