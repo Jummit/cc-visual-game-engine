@@ -112,20 +112,7 @@ local uiElements = {
       labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
       onClick = function()
         local runningGameEntities = utils.table.copy(gameEntities)
-        local oldTerm = term.redirect(runningGameWindow)
-        
-        os.startTimer(1)
-        while true do
-          runningGameWindow.setVisible(false)
-          utils.game.render(runningGameEntities)
-          runningGameWindow.setVisible(true)
-          if utils.game.update(runningGameEntities) then
-            runningGameWindow.setVisible(false)
-            break
-          end
-        end
-
-        term.redirect(oldTerm)
+        utils.game.run(utils.table.copy(gameEntities), runningGameWindow)
       end}
 }
 

@@ -34,4 +34,21 @@ function game.update(entities)
   end
 end
 
+function game.run(entities, runningGameWindow)
+  local oldTerm = term.redirect(runningGameWindow)
+
+  os.startTimer(1)
+  while true do
+    runningGameWindow.setVisible(false)
+    game.render(entities)
+    runningGameWindow.setVisible(true)
+    if game.update(entities) then
+      runningGameWindow.setVisible(false)
+      break
+    end
+  end
+  
+  term.redirect(oldTerm)
+end
+
 return game
