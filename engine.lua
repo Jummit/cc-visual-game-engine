@@ -50,7 +50,7 @@ entityList = ui.list({
       term.setCursorPos(entityList.x, entityList.y + entityList.selected - 1)
       term.setBackgroundColor(colors.gray)
       term.setTextColor(colors.white)
-      entityList.items[entityList.selected].name = io.read()
+      entityList:getSelected().name = io.read()
     end})
 
 local uiElements = {
@@ -137,7 +137,7 @@ local function updateComponentInEditor(component, event, var1, var2, var3)
   end
 
   -- update component
-  setmetatable(component.args, {__index = utils.entity.getVars(entityList.items[entityList.selected])})
+  setmetatable(component.args, {__index = utils.entity.getVars(entityList:getSelected())})
   components[component.type].editor(component.args, event, var1, var2, var3)
 end
 
@@ -150,9 +150,8 @@ local function updateEditor(event, var1, var2, var3)
     end
   end
 
-  local component = componentList.items[componentList.selected]
-  if component then
-    updateComponentInEditor(component, event, var1, var2, var3)
+  if componentList:getSelected() then
+    updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
   end
 end
 

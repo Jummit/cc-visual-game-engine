@@ -46,6 +46,9 @@ return function(t)
       table.insert(self.items, item)
       self:select(#self.items)
     end,
+    getSelected = function(self)
+      return self.items[self.selected]
+    end,
 
     shouldDelete = function() return true end,
     onItemSelected = function() end,
