@@ -153,15 +153,15 @@ local function drawEditor()
   if currentWindow then
     currentWindow:render()
   else
+    local oldTerm = term.redirect(gameWindow)
+    utils.game.render(gameEntities, entityList, componentList, true)
+    term.redirect(oldTerm)
+
     for _, element in pairs(uiElements) do
       if not element.hidden then
         element:render()
       end
     end
-
-    local oldTerm = term.redirect(gameWindow)
-    utils.game.render(gameEntities, entityList, componentList, true)
-    term.redirect(oldTerm)
   end
 end
 
