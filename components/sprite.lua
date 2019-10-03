@@ -24,7 +24,7 @@ return {
         local color = colorRadialMenu.update(self.clickedX, self.clickedY, event, var1, var2, var3)
         self.showTools = false
         self.drawColor = color
-      elseif self.drawColor then
+      else
         local x = var2 - self.x + 1
         local y = var3 - self.y + 1
 
