@@ -114,7 +114,7 @@ local uiElements = {
         local runningGameEntities = utils.table.copy(gameEntities)
         local oldTerm = term.redirect(runningGameWindow)
         
-        os.startTimer(0)
+        os.startTimer(1)
         while true do
           runningGameWindow.setVisible(false)
           utils.game.render(runningGameEntities)

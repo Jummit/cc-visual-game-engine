@@ -29,7 +29,7 @@ function game.update(entities)
   for _, entity in ipairs(entities) do
     local entityVars = entityUtils.getVars(entity)
     for _, component in ipairs(entity.components) do
-      components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3)
+      components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3, entities)
     end
   end
 end

@@ -11,7 +11,7 @@ return {
 
   render = function(self)
   end,
-  update = function(self, event, var1, var2, var3)
+  update = function(self, event, var1, var2, var3, entities)
     keyboard:update(event, var1, var2, var3)
 
     local move = {
@@ -38,7 +38,7 @@ return {
       local collided = false
 
       self.__MOVING = true
-      for _, e in ipairs(Entities) do
+      for _, e in ipairs(entities) do
         local vars = entityUtils.getVars(e)
         if not vars.__MOVING then
           local shape = vars.shape
