@@ -3,8 +3,8 @@ local keyboard = require "keyboard"
 
 return {
   args = {
-    x = 1,
-    y = 1,
+    x = 1.0,
+    y = 1.0,
   },
 
   render = function(self)
