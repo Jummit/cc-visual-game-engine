@@ -2,6 +2,7 @@ local components = require "components"
 local tableUtils = require "utils.table"
 local entityUtils = require "utils.entity"
 local keyboard = require "keyboard"
+local log = require "utils.log"
 local game = {}
 
 function game.render(entities, entityList, componentList, inEditor)

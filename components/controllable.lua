@@ -1,4 +1,5 @@
 local entityUtils = require "utils.entity"
+local log = require "utils.log"
 
 local speed = 10.0
 
@@ -16,8 +17,8 @@ local function tryToMove(self, entities, dx, dy, delta)
           for x, row in pairs(shape) do
             for y, on in pairs(row) do
               if on then
-                local x = x + vars.x - newX
-                local y = y + vars.y - newY
+                local x = math.ceil(x + vars.x - newX)
+                local y = math.ceil(y + vars.y - newY)
                 if self.shape[x] and self.shape[x][y] then
                   return
                 end
