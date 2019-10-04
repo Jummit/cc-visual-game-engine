@@ -18,6 +18,9 @@ local runningGameWindow = window.create(gameWindow, 1, 1, w - sideBarWidth, h)
 local gameEntities = utils.gameSave.load(saveFile) or {}
 local keyboard = require "keyboard"
 
+require("utils.log").clear()
+log = require("utils.log").write
+
 componentList = ui.list({
     x = 2, y = entityListHeight + 4,
     w = sideBarWidth - 2, h = componentListHeight,
@@ -111,19 +114,18 @@ local uiElements = {
       label = "run",
       labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
       onClick = function()
+        require("utils.log").clear()
         local runningGameEntities = utils.table.copy(gameEntities)
         utils.game.run(utils.table.copy(gameEntities), runningGameWindow)
       end}
 }
 
 local function updateComponentInEditor(component, event, var1, var2, var3)
-  -- calculate mouse position
   if event:sub(1, #"mouse") == "mouse" then
     var2 = var2 - sideBarWidth
   end
 
-  setmetatable(component.args, {__index = utils.entity.getVars(entityList:getSelected())})
-  local newWindow = components[component.type].editor(component.args, event, var1, var2, var3)
+  local newWindow = components[component.type].editor(utils.entity.entityTable(entityList:getSelected()), event, var1, var2, var3)
   if newWindow then
     currentWindow = newWindow
   end
@@ -143,7 +145,7 @@ local function updateEditor(event, var1, var2, var3)
       end
     end
     
-    if not (event == "mouse_down" or event == "mouse_drag") or var1 > sideBarWidth then
+    if not event:find("mouse") or var2 > sideBarWidth then
       if componentList:getSelected() then
         updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
       end

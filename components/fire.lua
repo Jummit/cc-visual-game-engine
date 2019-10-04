@@ -22,7 +22,8 @@ return {
   args = {
     particles = {}
   },
-
+  init = function(self)
+  end,
   render = function(self)
     for _, p in ipairs(self.particles) do
       paintutils.drawPixel(self.x + p.x, self.y + p.y, colorFlow[p.state])

@@ -10,13 +10,19 @@ return {
     right = "d"
   },
 
+  init = function(self)
+  end,
   render = function(self)
   end,
   update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-    keyboard:update(event, var1, var2, var3)
-
     if keyboard[self.up] then
-      entityUtils.moveAndCollide(self, entities, 0, -1, delta, speed)
+      if self.fallSpeed then
+        if entityUtils.testMove(self, entities, 0, 1) then
+          self.fallSpeed = -8
+        end
+      else
+        entityUtils.moveAndCollide(self, entities, 0, -1, delta, speed)
+      end
     elseif keyboard[self.down] then
       entityUtils.moveAndCollide(self, entities, 0, 1, delta, speed)
     end

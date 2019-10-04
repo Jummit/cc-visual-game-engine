@@ -27,7 +27,7 @@ return {
         local x, y = getSegmentPos(x, y, segment)
         if var2 == x and var3 == y then
           if gradient[segment] == "transparent" then
-            return nil
+            return -1
           end
           return colors[gradient[segment]]
         end

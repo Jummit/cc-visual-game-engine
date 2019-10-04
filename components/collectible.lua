@@ -6,14 +6,16 @@ return {
 		points = 0
 	},
 
-	render = function(self)
+	init = function(self)
+  end,
+  render = function(self)
 		term.setTextColor(colors.black)
 		term.setCursorPos(1, 1)
 		term.write("Points: " .. self.points)
 	end,
 	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
 		for _, e in ipairs(entities) do
-			local vars = entityUtils.getVars(e)
+			local vars = entityUtils.entityTable(e)
 			if vars.x and vars.y then
 				if vars.x ~= self.x and vars.y ~= self.y then
 					if mathUtils.distance(self.x, self.y, vars.x, vars.y) < 4 then

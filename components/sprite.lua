@@ -3,9 +3,13 @@ local colorRadialMenu = require "ui.colorRadialMenu"
 
 return {
   args = {
-    texture = {}
+    texture = {},
+    showTools = false,
+    clickedX = 0, clickedY = 0,
+    drawColor = colors.black
   },
-
+  init = function(self)
+  end,
   render = function(self)
     for x, row in pairs(self.texture) do
       for y, color in pairs(row) do
@@ -31,7 +35,14 @@ return {
         if not self.texture[x] then
           self.texture[x] = {}
         end
-        self.texture[x][y] = self.drawColor
+        if self.drawColor == -1 then
+          self.texture[x][y] = nil
+          if #self.texture[x] == 0 then
+            table.remove(self.texture, x)
+          end
+        else
+          self.texture[x][y] = self.drawColor
+        end
       end
     end
   end,

@@ -2,7 +2,8 @@ return {
   args = {
     shape = {}
   },
-
+  init = function(self)
+  end,
   render = function(self)
   end,
   update = function(self, event, var1, var2, var3, entities, keyboard, delta)
@@ -15,7 +16,11 @@ return {
       if not self.shape[x] then
         self.shape[x] = {}
       end
-      self.shape[x][y] = (var1 == 1)
+      if var1 == 1 then
+        self.shape[x][y] = true
+      else
+        self.shape[x][y] = nil
+      end
     end
   end,
   editorRender = function(self)

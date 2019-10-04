@@ -9,6 +9,7 @@ local shouldClose
 local function createComponent(type)
   local newComponent = tableUtils.copy(components[type])
   newComponent.type = type
+  newComponent.init = nil
   newComponent.render = nil
   newComponent.update = nil
   newComponent.editor = nil

@@ -6,7 +6,8 @@ return {
     x = 1.0,
     y = 1.0,
   },
-
+  init = function(self)
+  end,
   render = function(self)
   end,
   update = function(self, event, var1, var2, var3, entities, keyboard, delta)

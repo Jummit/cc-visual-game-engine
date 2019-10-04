@@ -2,19 +2,16 @@ local components = require "components"
 local tableUtils = require "utils.table"
 local entityUtils = require "utils.entity"
 local keyboard = require "keyboard"
-local log = require "utils.log"
 local game = {}
 
 function game.render(entities, entityList, componentList, inEditor)
   term.setBackgroundColor(colors.white)
   term.clear()
   for n, entity in ipairs(entities) do
-    local entityVars = entityUtils.getVars(entity)
     for i, component in ipairs(entity.components) do
-      setmetatable(component.args, {__index = entityVars})
-      components[component.type].render(component.args)
+      components[component.type].render(entityUtils.entityTable(entity))
       if inEditor and n == entityList.selected and i == componentList.selected then
-        components[component.type].editorRender(component.args)
+        components[component.type].editorRender(entityUtils.entityTable(entity))
       end
     end
   end
@@ -23,9 +20,9 @@ end
 function game.update(entities, lastUpdate)
   local event, var1, var2, var3 = os.pullEvent()
   
-  keyboard.update(event, var1, var2, var3)
+  keyboard:update(event, var1, var2, var3)
 
-  if event == "key" and keys.getName(var1) == "q" then
+  if keyboard.q then
     return true
   end
 
@@ -34,9 +31,16 @@ function game.update(entities, lastUpdate)
   end
 
   for _, entity in ipairs(entities) do
-    local entityVars = entityUtils.getVars(entity)
     for _, component in ipairs(entity.components) do
-      components[component.type].update(setmetatable(component.args, {__index = entityVars}), event, var1, var2, var3, entities, keyboard, os.clock() - lastUpdate)
+      components[component.type].update(entityUtils.entityTable(entity), event, var1, var2, var3, entities, keyboard, os.clock() - lastUpdate)
+    end
+  end
+end
+
+function game.initEntities(entities)
+  for _, entity in ipairs(entities) do
+    for _, component in ipairs(entity.components) do
+      components[component.type].init(entityUtils.entityTable(entity))
     end
   end
 end
@@ -48,10 +52,11 @@ function game.run(entities, runningGameWindow)
     end
   end
 
-  log.clear()
   local oldTerm = term.redirect(runningGameWindow)
-  os.startTimer(1)
+  
+  game.initEntities(entities)
   local lastUpdate = os.clock()
+  os.startTimer(1)
   while true do
     runningGameWindow.setVisible(false)
     game.render(entities)

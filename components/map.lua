@@ -94,7 +94,8 @@ return {
       }
     }
   },
-
+  init = function(self)
+  end,
   render = function(self)
     for x = 1, #self.tiles do
       for y = 1, #self.tiles[x] do
