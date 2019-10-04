@@ -171,6 +171,10 @@ os.startTimer(0)
 while true do
   drawEditor()
   local event, var1, var2, var3 = os.pullEvent()
+  keyboard.update(event, var1, var2, var3)
+  if keyboard.q and keyboard.leftCtrl then
+    break
+  end
   updateEditor(event, var1, var2, var3)
 end
 end)
