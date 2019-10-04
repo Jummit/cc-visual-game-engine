@@ -143,8 +143,10 @@ local function updateEditor(event, var1, var2, var3)
       end
     end
     
-    if componentList:getSelected() then
-      updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
+    if not (event == "mouse_down" or event == "mouse_drag") or var1 > sideBarWidth then
+      if componentList:getSelected() then
+        updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
+      end
     end
   end
 end
