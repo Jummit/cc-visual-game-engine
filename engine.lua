@@ -125,7 +125,9 @@ local function updateComponentInEditor(component, event, var1, var2, var3)
     var2 = var2 - sideBarWidth
   end
 
-  local newWindow = components[component.type].editor(utils.entity.entityTable(entityList:getSelected()), event, var1, var2, var3)
+  local newWindow = components[component.type].editor(
+      utils.entity.entityTable(entityList:getSelected()),
+      event, var1, var2, var3)
   if newWindow then
     currentWindow = newWindow
   end
