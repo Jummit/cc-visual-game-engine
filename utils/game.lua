@@ -53,7 +53,7 @@ function game.run(entities, runningGameWindow)
   end
 
   local oldTerm = term.redirect(runningGameWindow)
-  
+
   game.initEntities(entities)
   local lastUpdate = os.clock()
   os.startTimer(1)
@@ -68,6 +68,8 @@ function game.run(entities, runningGameWindow)
     end
     lastUpdate = os.clock()
   end
+  
+  cameraX, cameraY = 0, 0
   term.redirect(oldTerm)
 end
 

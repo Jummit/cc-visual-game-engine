@@ -20,6 +20,7 @@ local keyboard = require "keyboard"
 
 require("utils.log").clear()
 log = require("utils.log").write
+cameraX, cameraY = 0, 0
 
 componentList = ui.list({
     x = 2, y = entityListHeight + 4,

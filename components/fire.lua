@@ -26,7 +26,7 @@ return {
   end,
   render = function(self)
     for _, p in ipairs(self.particles) do
-      paintutils.drawPixel(self.x + p.x, self.y + p.y, colorFlow[p.state])
+      paintutils.drawPixel(self.x + p.x + cameraX, self.y + p.y + cameraY, colorFlow[p.state])
     end
   end,
   update = function(self, event, var1, var2, var3, entities, keyboard, delta)

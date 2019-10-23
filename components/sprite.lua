@@ -13,7 +13,7 @@ return {
   render = function(self)
     for x, row in pairs(self.texture) do
       for y, color in pairs(row) do
-        paintutils.drawPixel(self.x + x - 1, self.y + y - 1, color)
+        paintutils.drawPixel(self.x + x - 1 + cameraX, self.y + y - 1 + cameraY, color)
       end
     end
   end,

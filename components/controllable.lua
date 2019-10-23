@@ -32,6 +32,10 @@ return {
     elseif keyboard[self.right] then
       entityUtils.moveAndCollide(self, entities, 1, 0, delta, speed)
     end
+
+    local w,h = term.getSize()
+    cameraX = -self.x + w/2
+    cameraY = -self.y + h/2
   end,
   editor = function(self, event, var1, var2, var3, keyboard)
   end,

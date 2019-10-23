@@ -99,7 +99,7 @@ return {
   render = function(self)
     for x = 1, #self.tiles do
       for y = 1, #self.tiles[x] do
-        drawTile(self.x + x - 1, self.y + y - 1, self.tileset[self.tiles[x][y]])
+        drawTile(self.x + x - 1 + cameraX, self.y + y - 1 + cameraY, self.tileset[self.tiles[x][y]])
       end
     end
   end,
