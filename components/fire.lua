@@ -53,7 +53,7 @@ return {
       end
     end
   end,
-  editor = function(self, event, var1, var2, var3)
+  editor = function(self, event, var1, var2, var3, keyboard)
   end,
   editorRender = function(self)
     draw.box(self.x - 1, self.y - 2, 3, 3, colors.red)

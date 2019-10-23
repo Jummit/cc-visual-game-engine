@@ -127,7 +127,7 @@ local function updateComponentInEditor(component, event, var1, var2, var3)
 
   local newWindow = components[component.type].editor(
       utils.entity.entityTable(entityList:getSelected()),
-      event, var1, var2, var3)
+      event, var1, var2, var3, keyboard)
   if newWindow then
     currentWindow = newWindow
   end
