@@ -22,6 +22,10 @@ function game.update(entities, lastUpdate)
   
   keyboard:update(event, var1, var2, var3)
 
+  if event:sub(1, #"mouse") == "mouse" then
+    var2 = var2 - sideBarWidth
+  end
+
   if keyboard.q then
     return true
   end

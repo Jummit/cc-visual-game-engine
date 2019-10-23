@@ -1,4 +1,6 @@
 local tableUtils = require "utils.table"
+local components = require "components"
+
 local gameSave = {}
 
 function gameSave.save(saveFile, gameEntities)
@@ -9,14 +11,19 @@ end
 
 function gameSave.load(saveFile)
   if fs.exists(saveFile) then
-    local gameEntities = {}
     local file = fs.open(saveFile, "r")
     local loadEntities = textutils.unserialize(file.readAll())
-    for k, v in pairs(loadEntities) do
-      gameEntities[k] = tableUtils.copy(v)
+    for _, entity in ipairs(loadEntities) do
+      for _, component in ipairs(entity.components) do
+        for argName, argValue in pairs(components[component.type].args) do
+          if not component.args[argName] then
+            component.args[argName] = argValue
+          end
+        end
+      end
     end
     file.close()
-    return gameEntities
+    return loadEntities
   end
 end
 

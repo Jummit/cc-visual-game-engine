@@ -6,7 +6,7 @@ local w, h = term.getSize()
 
 local entityListHeight = 7
 local componentListHeight = 7
-local sideBarWidth = 12
+sideBarWidth = 12
 
 local components = require "components"
 local utils = require("utils.table").fromFiles("utils")
