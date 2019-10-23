@@ -25,6 +25,11 @@ return {
     elseif keyboard.right or keyboard.d then
       self.x = self.x + 1
     end
+
+    if event == "mouse_click" or event == "mouse_drag" then
+      self.x = var2
+      self.y = var3
+    end
   end,
   editorRender = function(self)
     draw.text(self.x, self.y, "+", colors.lightGray, colors.white)
