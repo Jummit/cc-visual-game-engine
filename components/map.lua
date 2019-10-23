@@ -69,7 +69,7 @@ local mapWindow = window{
     end
     if showTileEditorColorWheel then
       local c = colorRadialMenu.update(35, 10, event, var1, var2, var3)
-      if c then
+      if c and c ~= -1 then
         showTileEditorColorWheel = false
         self.tile[tileEditorColorWheelParam] = c
       end

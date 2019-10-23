@@ -13,6 +13,9 @@ return {
         elseif y == h then
           self.shape[x][y] = true
           self.tiles[x][y] = 3
+        elseif y - h > 5 then
+          self.shape[x][y] = true
+          self.tiles[x][y] = 4
         else
           self.shape[x][y] = true
           self.tiles[x][y] = 2
