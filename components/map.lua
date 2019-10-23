@@ -97,9 +97,13 @@ return {
   init = function(self)
   end,
   render = function(self)
-    for x = 1, #self.tiles do
-      for y = 1, #self.tiles[x] do
-        drawTile(self.x + x - 1 + cameraX, self.y + y - 1 + cameraY, self.tileset[self.tiles[x][y]])
+    local w, h = term.getSize()
+    for x = 1, w do
+      for y = 1, h do
+        local tx, ty = math.floor(x - cameraX), math.floor(y - cameraY)
+        if self.tiles[tx] and self.tiles[tx][ty] then
+          drawTile(x, y, self.tileset[self.tiles[tx][ty]])
+        end
       end
     end
   end,

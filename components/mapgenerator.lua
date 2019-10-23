@@ -4,10 +4,10 @@ return {
   init = function(self)
     local width, height = term.getSize()
     local h = height / 2
-    for x = 1, width do
+    for x = -width * 4, width * 4 do
       self.tiles[x] = {}
       self.shape[x] = {}
-      for y = 1, height do
+      for y = -height * 4, height * 4 do
         if y < h then
           self.tiles[x][y] = 1
         elseif y == h then
