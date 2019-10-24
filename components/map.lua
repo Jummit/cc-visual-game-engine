@@ -100,7 +100,7 @@ return {
     local w, h = term.getSize()
     for x = 1, w do
       for y = 1, h do
-        local tx, ty = math.floor(x - cameraX), math.floor(y - cameraY)
+        local tx, ty = math.floor(x - cameraX - self.x + 1), math.floor(y - cameraY - self.y + 1)
         if self.tiles[tx] and self.tiles[tx][ty] then
           drawTile(x, y, self.tileset[self.tiles[tx][ty]])
         end
