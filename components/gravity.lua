@@ -4,7 +4,7 @@ return {
 	args = {
 		fallSpeed = 0
 	},
-  
+	
 	init = function(self)
 	end,
 	render = function(self)
@@ -20,9 +20,9 @@ return {
 	end,
 	editorRender = function(self)
 	end,
-  
+	
 	needs = {
-	  "pos",
-	  "collision"
+		"pos",
+		"collision"
 	}
-  }
+}

@@ -1,6 +1,6 @@
 return {
 	args = {},
-
+	
 	init = function(self)
 	end,
 	render = function(self)
@@ -16,7 +16,7 @@ return {
 	end,
 	editorRender = function(self)
 	end,
-
+	
 	needs = {
 		"map"
 	}

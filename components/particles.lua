@@ -1,10 +1,10 @@
 local newParticle = function()
 	return {
-	  time = 0,
-	  x = 0,
-	  y = 0
+		time = 0,
+		x = 0,
+		y = 0
 	}
-  end
+end
 
 return {
 	args = {
@@ -35,6 +35,6 @@ return {
 	editorRender = function(self)
 	end,
 	needs = {
-	  "pos"
+		"pos"
 	}
-  }
+}
