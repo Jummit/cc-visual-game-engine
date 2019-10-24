@@ -110,15 +110,6 @@ return {
   update = function(self, event, var1, var2, var3, entities, keyboard, delta)
   end,
   editor = function(self, event, var1, var2, var3, keyboard)
-    if #self.tiles == 0 then
-      for x = 1, 50 do
-        self.tiles[x] = {}
-        for y = 1, 50 do
-          self.tiles[x][y] = 1
-        end
-      end
-    end
-
     if event == "mouse_click" or event == "mouse_drag" then
       local didSelectTile = false
       for i, tile in ipairs(self.tileset) do
@@ -143,14 +134,12 @@ return {
         })
       end
       if not didSelectTile then
-        local x = var2 - self.x + 1
-        local y = var3 - self.y + 1
-        if self.selectedTile and x > 0 and y > 0 and x <= #self.tiles and y <= #self.tiles[1] then
-          if not self.tiles[x] then
-            self.tiles[x] = {}
-          end
-          self.tiles[x][y] = self.selectedTile
+        local tx = var2 - self.x + 1
+        local ty = var3 - self.y + 1
+        if not self.tiles[tx] then
+          self.tiles[tx] = {}
         end
+        self.tiles[tx][ty] = self.selectedTile
       end
     end
   end,
