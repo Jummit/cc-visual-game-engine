@@ -4,6 +4,7 @@ local gameName = args[1] or "helloworld"
 local saveFile = "saves/"..gameName..".game"
 local w, h = term.getSize()
 
+local runFullscreen = false
 local entityListHeight = 7
 local componentListHeight = 7
 sideBarWidth = 12
@@ -17,7 +18,7 @@ local lastDragClickY
 
 local currentWindow
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
-local runningGameWindow = window.create(gameWindow, 1, 1, w - sideBarWidth, h)
+local runningGameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
 local gameEntities = utils.gameSave.load(saveFile) or {}
 local keyboard = require "keyboard"
 
@@ -109,7 +110,7 @@ local uiElements = {
 			x = 6, y = entityListHeight + componentListHeight + 3,
 			list = componentList},
 	ui.button{
-			x = w - 12, y = h,
+			x = w - 13, y = h,
 			w = 4, h = 1,
 			label = "save",
 			labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
@@ -117,14 +118,24 @@ local uiElements = {
 				utils.gameSave.save(saveFile, gameEntities)
 			end},
 	ui.button{
-			x = w - 7, y = h,
+			x = w - 8, y = h,
 			w = 3, h = 1,
 			label = "run",
 			labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
 			onClick = function()
 				require("utils.log").clear()
 				local runningGameEntities = utils.table.copy(gameEntities)
+				runningGameWindow.reposition(runFullscreen and 1 or sideBarWidth, 1, runFullscreen and w or w - sideBarWidth + 1, h)
 				utils.game.run(utils.table.copy(gameEntities), runningGameWindow)
+			end},
+	ui.button{
+			x = w - 5, y = h,
+			w = 1, h = 1,
+			label = "-",
+			labelColor = colors.white, color = colors.gray, clickedColor = colors.lightGray,
+			onClick = function(self)
+				runFullscreen = not runFullscreen
+				self.label = runFullscreen and "+" or "-"
 			end},
 	ui.button{
 			x = w - 2, y = h,
