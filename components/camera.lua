@@ -1,3 +1,5 @@
+local cameraUtils = require "utils.camera"
+
 return {
 	args = {},
 	
@@ -6,9 +8,7 @@ return {
 	render = function(self)
 	end,
 	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-		local w, h = term.getSize()
-		cameraX = -self.x + w / 2
-		cameraY = -self.y + h / 2
+		cameraX, cameraY = cameraUtils.centerOn(self.x, self.y)
 	end,
 	editor = function(self, event, var1, var2, var3, keyboard)
 	end,
