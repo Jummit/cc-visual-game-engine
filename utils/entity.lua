@@ -60,4 +60,14 @@ function entityUtils.testMove(entity, entities, x, y)
 	return entityUtils.moveAndCollide({x = entity.x, y = entity.y, shape = entity.shape, id = entity.id}, entities, x, y, 1, 1)
 end
 
+function entityUtils.findEntityWithComponent(entities, componentType)
+	for _, entity in ipairs(entities) do
+		for _, component in ipairs(entity.components) do
+			if component.type == componentType then
+				return entityUtils.entityTable(entity)
+			end
+		end
+	end
+end
+
 return entityUtils

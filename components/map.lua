@@ -4,13 +4,6 @@ local colorRadialMenu = require "ui.colorRadialMenu"
 local window = require "ui.window"
 local mathUtils = require "utils.math"
 
-local function drawTile(x, y, tile)
-	term.setCursorPos(x, y)
-	term.setBackgroundColor(tile.bc)
-	term.setTextColor(tile.tc)
-	term.write(tile.char)
-end
-
 local showTileEditorColorWheel = false
 local tileEditorColorWheelParam
 
@@ -81,18 +74,7 @@ local mapWindow = window{
 return {
 	args = {
 		tiles = {},
-		tileset = {
-			{
-				bc = colors.blue,
-				tc = colors.lightBlue,
-				char = "~"
-			},
-			{
-				bc = colors.green,
-				tc = colors.green,
-				char = " "
-			}
-		}
+		tileset = {}
 	},
 	init = function(self)
 	end,
@@ -102,7 +84,7 @@ return {
 			for y = 1, h do
 				local tx, ty = math.floor(x - cameraX - self.x + 1), math.floor(y - cameraY - self.y + 1)
 				if self.tiles[tx] and self.tiles[tx][ty] then
-					drawTile(x, y, self.tileset[self.tiles[tx][ty]])
+					draw.pixelTexture(x, y, self.tileset[self.tiles[tx][ty]])
 				end
 			end
 		end

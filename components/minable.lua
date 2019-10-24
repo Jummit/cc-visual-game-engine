@@ -1,3 +1,6 @@
+local entityUtils = require "utils.entity"
+local inventoryUtils = require "utils.inventory"
+
 return {
 	args = {},
 	
@@ -8,6 +11,17 @@ return {
 	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
 		if event == "mouse_click" or event == "mouse_drag" then
 			local tx, ty = math.floor(var2 - cameraX), math.floor(var3 - cameraY)
+			local tile = self.tiles[tx][ty]
+			if tile == 1 then
+				return
+			end
+			local inventory = entityUtils.findEntityWithComponent(entities, "inventory")
+			local item = {
+					name = tostring(tile),
+					amount = 1,
+					texture = self.tileset[tile]}
+			inventoryUtils.insert(inventory, item)
+			
 			self.tiles[tx][ty] = 1
 			self.shape[tx][ty] = false
 		end

@@ -33,4 +33,19 @@ function draw.centerText(x, y, w, h, text, textColor, backgroundColor)
 	term.write(text)
 end
 
+function draw.pixelTexture(x, y, tile)
+	term.setCursorPos(x, y)
+	term.setBackgroundColor(tile.bc)
+	term.setTextColor(tile.tc)
+	term.write(tile.char)
+end
+
+function draw.newPixelTexture(bc, tc, char)
+	return {
+		bc = bc,
+		tc = tc,
+		char = char
+	}
+end
+
 return draw
