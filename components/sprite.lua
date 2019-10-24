@@ -29,8 +29,8 @@ return {
 				self.showTools = false
 				self.drawColor = color
 			else
-				local x = var2 - self.x + 1
-				local y = var3 - self.y + 1
+				local x = var2 - self.x + 1 - cameraX
+				local y = var3 - self.y + 1 - cameraY
 				
 				if not self.texture[x] then
 					self.texture[x] = {}
@@ -48,9 +48,9 @@ return {
 	end,
 	editorRender = function(self)
 		if not (self.texture[1] and self.texture[1][1]) then
-			draw.text(self.x, self.y, "·", colors.lightGray, colors.white)
+			draw.text(self.x + cameraX, self.y + cameraY, "·", colors.lightGray, colors.white)
 		else
-			draw.text(self.x, self.y, "·", colors.lightGray, self.texture[1][1])
+			draw.text(self.x + cameraX, self.y + cameraY, "·", colors.lightGray, self.texture[1][1])
 		end
 		if self.showTools then
 			colorRadialMenu.render(self.clickedX, self.clickedY)

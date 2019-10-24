@@ -10,8 +10,8 @@ return {
 	end,
 	editor = function(self, event, var1, var2, var3, keyboard)
 		if event == "mouse_click" or event == "mouse_drag" then
-			local x = var2 - self.x + 1
-			local y = var3 - self.y + 1
+			local x = var2 - self.x + 1 - cameraX
+			local y = var3 - self.y + 1 - cameraY
 			
 			if not self.shape[x] then
 				self.shape[x] = {}
@@ -27,7 +27,7 @@ return {
 		for x, row in pairs(self.shape) do
 			for y, on in pairs(row) do
 				if on then
-					paintutils.drawPixel(self.x + x - 1, self.y + y - 1, colors.lightBlue)
+					paintutils.drawPixel(self.x + x - 1 + cameraX, self.y + y - 1 + cameraY, colors.lightBlue)
 				end
 			end
 		end

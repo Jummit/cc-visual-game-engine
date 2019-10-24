@@ -12,6 +12,9 @@ local components = require "components"
 local utils = require("utils.table").fromFiles("utils")
 local ui = utils.table.fromFiles("ui")
 
+local lastDragClickX
+local lastDragClickY
+
 local currentWindow
 local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
 local runningGameWindow = window.create(gameWindow, 1, 1, w - sideBarWidth, h)
@@ -160,7 +163,15 @@ local function updateEditor(event, var1, var2, var3)
 			end
 		end
 		
-		if not event:find("mouse") or (var2 > sideBarWidth and var3 < h) then
+		if event == "mouse_click" and var1 == 3 then
+			lastDragClickX = var2
+			lastDragClickY = var3
+		elseif event == "mouse_drag" and var1 == 3 then
+			cameraX = cameraX - (lastDragClickX - var2)
+			cameraY = cameraY - (lastDragClickY - var3)
+			lastDragClickX = var2
+			lastDragClickY = var3
+		elseif not event:find("mouse") or (var2 > sideBarWidth and var3 < h) then
 			if componentList:getSelected() then
 				updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
 			end

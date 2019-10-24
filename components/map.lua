@@ -134,8 +134,8 @@ return {
 				})
 			end
 			if not didSelectTile then
-				local tx = var2 - self.x + 1
-				local ty = var3 - self.y + 1
+				local tx = var2 - self.x + 1 - cameraX
+				local ty = var3 - self.y + 1 - cameraY
 				if not self.tiles[tx] then
 					self.tiles[tx] = {}
 				end
