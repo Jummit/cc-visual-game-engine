@@ -1,28 +1,28 @@
 local mathUtils = require "utils.math"
 
-local generateSlice = function(self, x, height, terrainHeight)
+local generateSlice = function(self, height, terrainHeight)
 	local shape = {}
-	self.tiles[x] = {}
+	local tiles = {}
 	for y = -height, height do
 		if y < terrainHeight then
-			self.tiles[x][y] = 1
+			tiles[y] = 1
 			if y == terrainHeight - 1 then
 				if math.random(1, 3) == 1 then
-					self.tiles[x][y] = 5
+					tiles[y] = 5
 				end
 			end
 		elseif y == terrainHeight then
-			shape[x][y] = true
-			self.tiles[x][y] = 3
+			shape[y] = true
+			tiles[y] = 3
 		elseif y - terrainHeight > 5 then
-			shape[x][y] = true
-			self.tiles[x][y] = 4
+			shape[y] = true
+			tiles[y] = 4
 		else
-			shape[x][y] = true
-			self.tiles[x][y] = 2
+			shape[y] = true
+			tiles[y] = 2
 		end
 	end
-	return shape
+	return tiles, shape
 end
 
 local function generateTree(self, tree)
@@ -69,7 +69,7 @@ return {
 		local trees = {}
 		
 		for x = -width, width do
-			shape[x] = generateSlice(self, x, height, terrainHeight)
+			self.tiles[x], shape[x] = generateSlice(self, height, terrainHeight)
 			
 			if shouldGenerateTree(x, height) then
 				table.insert(trees, newTree(x, terrainHeight))
