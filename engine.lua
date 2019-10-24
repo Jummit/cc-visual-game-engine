@@ -63,7 +63,11 @@ local uiElements = {
       x = 1, y = 1,
       w = sideBarWidth, h = h,
       color = colors.lightGray},
-      entityList,
+  ui.box{
+    x = 1, y = h,
+    w = w, h = 1,
+    color = colors.lightGray},
+  entityList,
   componentList,
   ui.centerText{
       x = 2, y = entityListHeight + 2,
@@ -102,7 +106,7 @@ local uiElements = {
       x = 6, y = entityListHeight + componentListHeight + 3,
       list = componentList},
   ui.button{
-      x = w - 3, y = 1,
+      x = w - 12, y = h,
       w = 4, h = 1,
       label = "save",
       labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
@@ -110,7 +114,7 @@ local uiElements = {
         utils.gameSave.save(saveFile, gameEntities)
       end},
   ui.button{
-      x = w - 3, y = 2,
+      x = w - 7, y = h,
       w = 3, h = 1,
       label = "run",
       labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
@@ -118,6 +122,14 @@ local uiElements = {
         require("utils.log").clear()
         local runningGameEntities = utils.table.copy(gameEntities)
         utils.game.run(utils.table.copy(gameEntities), runningGameWindow)
+      end},
+  ui.button{
+      x = w - 2, y = h,
+      w = 3, h = 1,
+      label = "exit",
+      labelColor = colors.red, color = colors.orange, clickedColor = colors.yellow,
+      onClick = function()
+        shouldQuit = true
       end}
 }
 
@@ -148,7 +160,7 @@ local function updateEditor(event, var1, var2, var3)
       end
     end
     
-    if not event:find("mouse") or var2 > sideBarWidth then
+    if not event:find("mouse") or (var2 > sideBarWidth and var3 < h) then
       if componentList:getSelected() then
         updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
       end
@@ -177,7 +189,7 @@ while true do
   drawEditor()
   local event, var1, var2, var3 = os.pullEvent()
   keyboard.update(event, var1, var2, var3)
-  if keyboard.q and keyboard.leftCtrl then
+  if keyboard.q and keyboard.leftCtrl or shouldQuit then
     break
   end
   updateEditor(event, var1, var2, var3)
