@@ -1,4 +1,3 @@
-local tableUtils = require "utils.table"
 local components = require "components"
 
 local gameSave = {}
