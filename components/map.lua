@@ -45,7 +45,7 @@ local mapWindow = window{
 		local tx, ty = x + 18, y + 3
 		for x = 1, 5 do
 			for y = 1, 4 do
-				drawTile(tx + x, ty + y, self.tile)
+				draw.pixelTexture(tx + x, ty + y, self.tile)
 			end
 		end
 		for _, button in ipairs(mapButtons) do
@@ -127,10 +127,10 @@ return {
 	end,
 	editorRender = function(self)
 		for i, tile in ipairs(self.tileset) do
-			drawTile(i * 2, 1, tile)
-			drawTile(i * 2, 2, tile)
-			drawTile(i * 2 - 1, 1, tile)
-			drawTile(i * 2 - 1, 2, tile)
+			draw.pixelTexture(i * 2, 1, tile)
+			draw.pixelTexture(i * 2, 2, tile)
+			draw.pixelTexture(i * 2 - 1, 1, tile)
+			draw.pixelTexture(i * 2 - 1, 2, tile)
 		end
 		draw.text(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
 	end,
