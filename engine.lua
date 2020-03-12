@@ -59,7 +59,10 @@ entityList = ui.list({
 			term.setCursorPos(entityList.x, entityList.y + entityList.selected - 1)
 			term.setBackgroundColor(colors.gray)
 			term.setTextColor(colors.white)
-			entityList:getSelected().name = io.read()
+			local newName = io.read()
+			if #newName > 0 then
+				entityList:getSelected().name = newName
+			end
 		end})
 
 local uiElements = {
