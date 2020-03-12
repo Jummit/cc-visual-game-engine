@@ -23,18 +23,18 @@ local componentList = newList({
 		getLabel = function(item)
 			return item
 		end,
-		onDoubleClick = function(item)
-			local c = components[item]
+		onDoubleClick = function(self, item)
+			local newComponent = components[item]
 
-			for _, need in ipairs(c.needs) do
-				local needExists = false
-				for _, component in ipairs(componentList.items) do
-					if need == component.type then
-						needExists = true
+			for _, neededComponent in ipairs(newComponent.needs) do
+				local neededExists = false
+				for _, existingComponent in ipairs(componentList.items) do
+					if existingComponent.type == neededComponent then
+						neededExists = true
 					end
 				end
-				if not needExists then
-					componentList:add(createComponent(need))
+				if not neededExists then
+					componentList:add(createComponent(neededComponent))
 				end
 			end
 
