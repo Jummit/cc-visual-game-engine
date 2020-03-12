@@ -13,19 +13,27 @@ return function(t)
 					term.setTextColor(colors.lightGray)
 				end
 
-				term.setCursorPos(self.x, self.y + i - 1)
-				term.write(self.getLabel(item))
+				local itemPos = i - 1 + self.scroll
+				if itemPos >= 0 and itemPos < self.h then
+					term.setCursorPos(self.x, self.y + itemPos)
+					term.write(self.getLabel(item))
+				end
 			end
 		end,
 		update = function(self, event, var1, var2, var3)
 			if event == "mouse_click" then
-				local clickedItem = var3 - self.y + 1
+				local clickedItem = var3 - self.y + 1 - self.scroll
 				if mathUtils.pointInBox(self.x, self.y, self.w, self.h, var2, var3) and #self.items >= clickedItem then
 					if self.selected == clickedItem then
 						self.onDoubleClick(self.items[self.selected])
 					else
 						self:select(clickedItem)
 					end
+				end
+			elseif event == "mouse_scroll" and mathUtils.pointInBox(self.x, self.y, self.w, self.h, var2, var3) then
+				local newScroll = self.scroll - var1
+				if newScroll <= 0 and #self.items + newScroll > self.h - 2 then
+					self.scroll = newScroll
 				end
 			end
 		end,
@@ -50,6 +58,7 @@ return function(t)
 			return self.items[self.selected]
 		end,
 
+		scroll = 0,
 		shouldDelete = function() return true end,
 		onItemSelected = function() end,
 		onDoubleClick = function() end
