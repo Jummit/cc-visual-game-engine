@@ -42,6 +42,26 @@ componentList = ui.list({
 				end
 			end
 			return true
+		end,
+		addComponent = function(self, componentType)
+			local newComponent = components[componentType]
+
+			for _, neededComponent in ipairs(newComponent.needs) do
+				local neededExists = false
+				for _, existingComponent in ipairs(self.items) do
+					if existingComponent.type == neededComponent then
+						neededExists = true
+					end
+				end
+				if not neededExists then
+					self:addComponent(neededComponent)
+				end
+			end
+
+			self:add({
+					type = componentType,
+					args = components[componentType].args,
+					needs = components[componentType].needs})
 		end})
 
 entityList = ui.list({

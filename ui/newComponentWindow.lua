@@ -6,17 +6,6 @@ local newWindow = require "ui.window"
 local newComponentList
 local shouldClose
 
-local function createComponent(type)
-	local newComponent = tableUtils.copy(components[type])
-	newComponent.type = type
-	newComponent.init = nil
-	newComponent.render = nil
-	newComponent.update = nil
-	newComponent.editor = nil
-	newComponent.editorRender = nil
-	return newComponent
-end
-
 local componentList = newList({
 		x = 0, y = 0, w = 0, h = 0,
 		items = {},
@@ -24,21 +13,7 @@ local componentList = newList({
 			return item
 		end,
 		onDoubleClick = function(self, item)
-			local newComponent = components[item]
-
-			for _, neededComponent in ipairs(newComponent.needs) do
-				local neededExists = false
-				for _, existingComponent in ipairs(componentList.items) do
-					if existingComponent.type == neededComponent then
-						neededExists = true
-					end
-				end
-				if not neededExists then
-					componentList:add(createComponent(neededComponent))
-				end
-			end
-
-			componentList:add(createComponent(item))
+			componentList:addComponent(item)
 			shouldClose = true
 		end})
 

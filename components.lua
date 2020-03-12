@@ -22,9 +22,9 @@ local template = {
 	}
 }
 
-for i, comFile in ipairs(fs.list("components")) do
-	local comName = comFile:match("(.*).lua")
-	components[comName] = require("components."..comName)
+for i, componentFile in ipairs(fs.list("components")) do
+	local componentName = componentFile:match("(.*).lua")
+	components[componentName] = require("components."..componentName)
 end
 
 return components
