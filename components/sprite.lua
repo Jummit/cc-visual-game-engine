@@ -48,9 +48,9 @@ return {
 	end,
 	editorRender = function(self)
 		if not (self.texture[1] and self.texture[1][1]) then
-			draw.text(self.x + cameraX, self.y + cameraY, "·", colors.lightGray, colors.white)
+			draw.text(self.x + cameraX, self.y + cameraY, "+", colors.lightGray, colors.white)
 		else
-			draw.text(self.x + cameraX, self.y + cameraY, "·", colors.lightGray, self.texture[1][1])
+			draw.text(self.x + cameraX, self.y + cameraY, "+", colors.lightGray, self.texture[1][1])
 		end
 		if self.showTools then
 			colorRadialMenu.render(self.clickedX, self.clickedY)
