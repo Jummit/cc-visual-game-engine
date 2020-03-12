@@ -5,7 +5,7 @@ local window = require "ui.window"
 local mathUtils = require "utils.math"
 
 local showTileEditorColorWheel = false
-local tileEditorColorWheelParam
+local tileEditorEditingColor
 
 local mapButtons = {
 	newButton{
@@ -14,7 +14,9 @@ local mapButtons = {
 		color = colors.gray, labelColor = colors.lightGray,
 		clickedColor = colors.white,
 		onClick = function(self)
+			self:render()
 			_, self.tile.char = os.pullEvent("char")
+			self.pressed = false
 		end
 	},
 	newButton{
@@ -23,7 +25,7 @@ local mapButtons = {
 		color = colors.gray, labelColor = colors.lightGray,
 		clickedColor = colors.white,
 		onClick = function(self)
-			tileEditorColorWheelParam = "bc"
+			tileEditorEditingColor = "bc"
 			showTileEditorColorWheel = true
 		end
 	},
@@ -33,7 +35,7 @@ local mapButtons = {
 		color = colors.gray, labelColor = colors.lightGray,
 		clickedColor = colors.white,
 		onClick = function(self)
-			tileEditorColorWheelParam = "tc"
+			tileEditorEditingColor = "tc"
 			showTileEditorColorWheel = true
 		end
 	}
@@ -64,7 +66,7 @@ local mapWindow = window{
 			local c = colorRadialMenu.update(35, 10, event, var1, var2, var3)
 			if c and c ~= -1 then
 				showTileEditorColorWheel = false
-				self.tile[tileEditorColorWheelParam] = c
+				self.tile[tileEditorEditingColor] = c
 			end
 		end
 	end,

@@ -18,5 +18,6 @@ return function(t)
 			end
 		end,
 		onClick = function(self) end,
+		pressed = false
 	}})
 end
