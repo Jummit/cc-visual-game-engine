@@ -25,7 +25,7 @@ return function(t)
 				local clickedItem = var3 - self.y + 1 - self.scroll
 				if mathUtils.pointInBox(self.x, self.y, self.w, self.h, var2, var3) and #self.items >= clickedItem then
 					if self.selected == clickedItem then
-						self.onDoubleClick(self.items[self.selected])
+						self:onDoubleClick(self.items[self.selected])
 					else
 						self:select(clickedItem)
 					end
@@ -41,7 +41,7 @@ return function(t)
 			self.selected = nil
 			if #self.items ~= 0 then
 				self.selected = (i > 0 and i <= #self.items and i) or 1
-				self.onItemSelected(self.items[self.selected])
+				self:onItemSelected(self.items[self.selected])
 			end
 		end,
 		removeSelected = function(self)
@@ -59,8 +59,8 @@ return function(t)
 		end,
 
 		scroll = 0,
-		shouldDelete = function() return true end,
-		onItemSelected = function() end,
-		onDoubleClick = function() end
+		shouldDelete = function(self, item) return true end,
+		onItemSelected = function(self, item) end,
+		onDoubleClick = function(self, item) end
 	}})
 end

@@ -33,10 +33,10 @@ componentList = ui.list({
 		getLabel = function(item)
 			return item.type
 		end,
-		shouldDelete = function(components, toDelete)
-			for _, c in ipairs(components.items) do
-				for _, need in ipairs(c.needs) do
-					if toDelete.type == need then
+		shouldDelete = function(self, toDelete)
+			for _, component in ipairs(self.items) do
+				for _, neededComponent in ipairs(component.needs) do
+					if toDelete.type == neededComponent then
 						return false
 					end
 				end
@@ -51,11 +51,11 @@ entityList = ui.list({
 		getLabel = function(item)
 			return item.name
 		end,
-		onItemSelected = function(item)
+		onItemSelected = function(self, item)
 			componentList.items = item.components
 			componentList:select(1)
 		end,
-		onDoubleClick = function(item)
+		onDoubleClick = function(self, item)
 			term.setCursorPos(entityList.x, entityList.y + entityList.selected - 1)
 			term.setBackgroundColor(colors.gray)
 			term.setTextColor(colors.white)
