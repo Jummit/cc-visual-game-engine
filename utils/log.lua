@@ -7,7 +7,7 @@ end
 
 log.write = function(str)
 	local file = fs.open("out.log", "a")
-	file.write(str.."\n")
+	file.write(tostring(str).."\n")
 	file.close()
 end
 

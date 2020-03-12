@@ -30,7 +30,6 @@ function entityUtils.areColliding(entity1, entity2)
 				local x = math.floor(x + entity1.x - entity2.x)
 				local y = math.floor(y + entity1.y - entity2.y)
 				if entity2.shape[x] and entity2.shape[x][y] then
-					log(string.format("%s (id %s) collided with %s (id %s) at %s, %s", entity1.name, entity1.id, entity1.name, entity2.id, x, y))
 					return true
 				end
 			end
@@ -52,7 +51,6 @@ function entityUtils.moveAndCollide(entity, entities, x, y, delta, speed)
 			end
 		end
 	end
-	log("entity moved by "..x..", "..y.." with dt "..delta)
 	return false
 end
 

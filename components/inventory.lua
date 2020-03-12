@@ -8,9 +8,8 @@ return {
 	args = {
 		holding = {},
 		slots = {
-			{},{},{},{},{}
-		},
-		
+			{}, {}, {}, {}, {}
+		}
 	},
 	
 	init = function(self)

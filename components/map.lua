@@ -123,7 +123,11 @@ return {
 				if not self.tiles[tx] then
 					self.tiles[tx] = {}
 				end
-				self.tiles[tx][ty] = self.selectedTile
+				if var1 == 1 then
+					self.tiles[tx][ty] = self.selectedTile
+				elseif var1 == 2 then
+					self.tiles[tx][ty] = nil
+				end
 			end
 		end
 	end,

@@ -60,7 +60,7 @@ componentList = ui.list({
 
 			self:add({
 					type = componentType,
-					args = components[componentType].args,
+					args = utils.table.copy(components[componentType].args),
 					needs = components[componentType].needs})
 		end})
 
@@ -148,7 +148,7 @@ local uiElements = {
 			onClick = function()
 				require("utils.log").clear()
 				local runningGameEntities = utils.table.copy(gameEntities)
-				runningGameWindow.reposition(runFullscreen and 1 or sideBarWidth, 1, runFullscreen and w or w - sideBarWidth + 1, h)
+				runningGameWindow.reposition(runFullscreen and 1 or sideBarWidth + 1, 1, runFullscreen and w or w - sideBarWidth + 1, h)
 				utils.game.run(utils.table.copy(gameEntities), runningGameWindow)
 			end},
 	ui.button{
