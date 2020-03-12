@@ -71,9 +71,9 @@ local uiElements = {
 			w = sideBarWidth, h = h,
 			color = colors.lightGray},
 	ui.box{
-		x = 1, y = h,
-		w = w, h = 1,
-		color = colors.lightGray},
+			x = 1, y = h,
+			w = w, h = 1,
+			color = colors.lightGray},
 	entityList,
 	componentList,
 	ui.centerText{
