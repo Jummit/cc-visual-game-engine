@@ -1,20 +1,16 @@
-local tableUtils = require "utils.table"
 local components = require "components.components"
 local newList = require "ui.list"
 local newWindow = require "ui.window"
 
-local newComponentList
-local shouldClose
-
 local componentList = newList({
 		x = 0, y = 0, w = 0, h = 0,
-		items = {},
+		items = {}, shouldClose = false,
 		getLabel = function(item)
 			return item
 		end,
 		onDoubleClick = function(self, item)
 			self.list:addComponent(item)
-			shouldClose = true
+			self.shouldClose = true
 		end})
 
 for k, v in pairs(components) do
@@ -22,7 +18,6 @@ for k, v in pairs(components) do
 end
 
 return function(list)
-	shouldClose = false
 	componentList.list = list
 	return newWindow{
 		visible = true,
@@ -36,7 +31,7 @@ return function(list)
 		end,
 		update = function(self, event, var1, var2, var3)
 			componentList:update(event, var1, var2, var3)
-			return shouldClose
+			return componentList.shouldClose
 		end
 	}
 end

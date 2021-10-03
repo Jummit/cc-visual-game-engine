@@ -125,7 +125,7 @@ local uiElements = {
 				componentList:removeSelected()
 			end,
 			add = function()
-				currentWindow = ui.newComponentWindow(componentList)
+				editor.window = ui.newComponentWindow(componentList)
 			end},
 	ui.buttons.move{
 			x = 6, y = entityListHeight + 1,
@@ -177,9 +177,9 @@ local uiElements = {
 local function updateEditor(event, var1, var2, var3)
 	keyboard:update(event, var1)
 
-	if editor.currentWindow then
-		if editor.currentWindow:update(event, var1, var2, var3) then
-			editor.currentWindow = nil
+	if editor.window then
+		if editor.window:update(event, var1, var2, var3) then
+			editor.window = nil
 		end
 	else
 		for _, element in ipairs(uiElements) do
@@ -211,8 +211,8 @@ local function updateEditor(event, var1, var2, var3)
 end
 
 local function drawEditor()
-	if currentWindow then
-		currentWindow:render()
+	if editor.window then
+		editor.window:render()
 	else
 		runtime:render()
 		for _, element in ipairs(uiElements) do
