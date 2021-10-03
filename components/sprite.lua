@@ -8,18 +8,17 @@ return {
 		clickedX = 0, clickedY = 0,
 		drawColor = colors.black
 	},
-	init = function(self)
-	end,
-	render = function(self)
+	needs = {
+		"pos"
+	},
+	render = function(self, game)
 		for x, row in pairs(self.texture) do
 			for y, color in pairs(row) do
-				paintutils.drawPixel(self.x + x - 1 + cameraX, self.y + y - 1 + cameraY, color)
+				paintutils.drawPixel(self.x + x - 1 + game.cameraX, self.y + y - 1 + game.cameraY, color)
 			end
 		end
 	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-	end,
-	editor = function(self, event, var1, var2, var3)
+	editorUpdate = function(self, editor, game, event, var1, var2, var3)
 		if event == "mouse_click" or event == "mouse_drag" then
 			if var1 == 2 then
 				self.showTools = true
@@ -29,9 +28,9 @@ return {
 				self.showTools = false
 				self.drawColor = color
 			else
-				local x = var2 - self.x + 1 - cameraX
-				local y = var3 - self.y + 1 - cameraY
-				
+				local x = var2 - self.x + 1 - game.cameraX
+				local y = var3 - self.y + 1 - game.cameraY
+
 				if not self.texture[x] then
 					self.texture[x] = {}
 				end
@@ -46,18 +45,14 @@ return {
 			end
 		end
 	end,
-	editorRender = function(self)
+	editorRender = function(self, editor, game)
 		if not (self.texture[1] and self.texture[1][1]) then
-			draw.text(self.x + cameraX, self.y + cameraY, "+", colors.lightGray, colors.white)
+			draw.text(self.x + game.cameraX, self.y + game.cameraY, "+", colors.lightGray, colors.white)
 		else
-			draw.text(self.x + cameraX, self.y + cameraY, "+", colors.lightGray, self.texture[1][1])
+			draw.text(self.x + game.cameraX, self.y + game.cameraY, "+", colors.lightGray, self.texture[1][1])
 		end
 		if self.showTools then
 			colorRadialMenu.render(self.clickedX, self.clickedY)
 		end
 	end,
-	
-	needs = {
-		"pos"
-	}
 }

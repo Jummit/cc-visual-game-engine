@@ -10,17 +10,21 @@ return {
 	args = {
 		particles = {}
 	},
+	needs = {
+		"pos"
+	},
 	init = function(self)
 		for i = 1, 10 do
 			table.insert(self.particles, newParticle())
 		end
 	end,
-	render = function(self)
+	render = function(self, game)
 		for _, p in ipairs(self.particles) do
-			paintutils.drawPixel(self.x + p.x + cameraX, self.y + p.y + cameraY, colors.lightBlue)
+			paintutils.drawPixel(self.x + p.x + game.cameraX,
+					self.y + p.y + game.cameraY, colors.lightBlue)
 		end
 	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
+	update = function(self)
 		for i, p in ipairs(self.particles) do
 			p.y = p.y + math.random(5, 9) / 10
 			p.time = p.time + 1
@@ -30,11 +34,4 @@ return {
 			end
 		end
 	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
-	end,
-	editorRender = function(self)
-	end,
-	needs = {
-		"pos"
-	}
 }

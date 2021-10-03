@@ -2,20 +2,17 @@ local entityUtils = require "utils.entity"
 local inventoryUtils = require "utils.inventory"
 
 return {
-	args = {},
-	
-	init = function(self)
-	end,
-	render = function(self)
-	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
+	needs = {
+		"map"
+	},
+	update = function(self, game, event, var1, var2, var3)
 		if event == "mouse_click" or event == "mouse_drag" then
-			local tx, ty = math.floor(var2 - cameraX - self.x + 1), math.floor(var3 - cameraY - self.y + 1)
+			local tx, ty = math.floor(var2 - game.cameraX - self.x + 2), math.floor(var3 - game.cameraY - self.y + 2)
 			local tile
 			if self.tiles[tx] and self.tiles[tx][ty] then
 				tile = self.tiles[tx][ty]
 			end
-			local inventory = entityUtils.findEntityWithComponent(entities, "inventory")
+			local inventory = entityUtils.findEntityWithComponent(game.entities, "inventory")
 
 			if inventory and inventory.holding.amount and tile == nil then
 				if self.shape then
@@ -49,12 +46,4 @@ return {
 			end
 		end
 	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
-	end,
-	editorRender = function(self)
-	end,
-	
-	needs = {
-		"map"
-	}
 }

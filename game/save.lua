@@ -1,4 +1,4 @@
-local components = require "components"
+local components = require "components.components"
 
 local gameSave = {}
 

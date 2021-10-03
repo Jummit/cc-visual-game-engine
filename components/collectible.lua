@@ -5,16 +5,17 @@ return {
 	args = {
 		points = 0
 	},
-	
-	init = function(self)
-	end,
+	needs = {
+		"pos",
+		"collision"
+	},
 	render = function(self)
 		term.setTextColor(colors.black)
 		term.setCursorPos(1, 1)
 		term.write("Points: " .. self.points)
 	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-		for _, e in ipairs(entities) do
+	update = function(self, game)
+		for _, e in ipairs(game.entities) do
 			local vars = entityUtils.entityTable(e)
 			if vars.x and vars.y then
 				if vars.x ~= self.x and vars.y ~= self.y then
@@ -27,13 +28,4 @@ return {
 			end
 		end
 	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
-	end,
-	editorRender = function(self)
-	end,
-	
-	needs = {
-		"pos",
-		"collision"
-	}
 }

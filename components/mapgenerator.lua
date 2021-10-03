@@ -54,7 +54,9 @@ local function newTree(x, terrainHeight)
 end
 
 return {
-	args = {
+	needs = {
+		"pos",
+		"map"
 	},
 	init = function(self)
 		if #self.tileset < 7 then
@@ -88,17 +90,4 @@ return {
 			self.shape = shape
 		end
 	end,
-	render = function(self)
-	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
-	end,
-	editorRender = function(self)
-	end,
-	
-	needs = {
-		"pos",
-		"map"
-	}
 }

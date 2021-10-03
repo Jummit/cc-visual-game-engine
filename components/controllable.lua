@@ -1,4 +1,4 @@
-local entityUtils = require "utils.entity"
+local entityUtils = require "game.entityUtils"
 
 local speed = 10.0
 
@@ -9,13 +9,12 @@ return {
 		left = "a",
 		right = "d"
 	},
-	
-	init = function(self)
-	end,
-	render = function(self)
-	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-		if keyboard[self.up] then
+	needs = {
+		"pos"
+	},
+	update = function(self, game, event, var1, var2, var3, delta)
+		local entities = game.entities
+		if game.keyboard[self.up] then
 			if self.fallSpeed then
 				if entityUtils.testMove(self, entities, 0, 1) then
 					self.fallSpeed = -8
@@ -23,22 +22,14 @@ return {
 			else
 				entityUtils.moveAndCollide(self, entities, 0, -1, delta, speed)
 			end
-		elseif keyboard[self.down] then
+		elseif game.keyboard[self.down] then
 			entityUtils.moveAndCollide(self, entities, 0, 1, delta, speed)
 		end
 		
-		if keyboard[self.left] then
+		if game.keyboard[self.left] then
 			entityUtils.moveAndCollide(self, entities, -1, 0, delta, speed)
-		elseif keyboard[self.right] then
+		elseif game.keyboard[self.right] then
 			entityUtils.moveAndCollide(self, entities, 1, 0, delta, speed)
 		end
 	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
-	end,
-	editorRender = function(self)
-	end,
-	
-	needs = {
-		"pos"
-	}
 }

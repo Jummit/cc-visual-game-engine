@@ -11,9 +11,9 @@ return {
 			{}, {}, {}, {}, {}
 		}
 	},
-	
-	init = function(self)
-	end,
+	needs = {
+		"pos"
+	},
 	render = function(self)
 		for slotNum, item in ipairs(self.slots) do
 			local slotX, slotY = getSlotPos(self, slotNum)
@@ -25,7 +25,7 @@ return {
 			end
 		end
 	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
+	update = function(self, game, event, var1, var2, var3)
 		if event == "mouse_click" then
 			for slotNum, item in ipairs(self.slots) do
 				local slotX, slotY = getSlotPos(self, slotNum)
@@ -41,12 +41,4 @@ return {
 			end
 		end
 	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
-	end,
-	editorRender = function(self)
-	end,
-	
-	needs = {
-		"pos"
-	}
 }

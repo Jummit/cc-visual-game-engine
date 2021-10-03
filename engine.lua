@@ -1,32 +1,30 @@
 local args = {...}
 require("utils.runSave")(function()
-local gameName = args[1] or "helloworld"
-local saveFile = "saves/"..gameName..".game"
+-- Requires
+local components = require "components.components"
+local tableUtils = require "utils.table"
+local entityUtils = require "game.entityUtils"
+local gameSave = require "game.save"
+local ui = tableUtils.fromFiles("ui")
+
+local saveFile = "saves/"..(args[1] or "helloworld")..".game"
+
 local w, h = term.getSize()
+local entityListHeight = 7
+local sideBarWidth = 12
+local componentListHeight = 7
 
 local runFullscreen = false
-local entityListHeight = 7
-local componentListHeight = 7
-sideBarWidth = 12
-
-local components = require "components"
-local utils = require("utils.table").fromFiles("utils")
-local ui = utils.table.fromFiles("ui")
-
+local shouldQuit = false
 local lastDragClickX
 local lastDragClickY
-
 local currentWindow
-local gameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
-local runningGameWindow = window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h)
-local gameEntities = utils.gameSave.load(saveFile) or {}
-local keyboard = require "keyboard"
 
-require("utils.log").clear()
-log = require("utils.log").write
-cameraX, cameraY = 0, 0
+local keyboard = require("utils.keyboard")()
+local runtime = require("game.runtime")(gameSave.load(saveFile) or {},
+		window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h))
 
-componentList = ui.list({
+local componentList = ui.list({
 		x = 2, y = entityListHeight + 4,
 		w = sideBarWidth - 2, h = componentListHeight,
 		items = {},
@@ -60,14 +58,15 @@ componentList = ui.list({
 
 			self:add({
 					type = componentType,
-					args = utils.table.copy(components[componentType].args),
+					args = tableUtils.copy(components[componentType].args),
 					needs = components[componentType].needs})
 		end})
 
+local entityList
 entityList = ui.list({
 		x = 2, y = 2,
 		w = sideBarWidth - 2, h = entityListHeight,
-		items = gameEntities,
+		items = runtime.entities,
 		getLabel = function(item)
 			return item.name
 		end,
@@ -124,7 +123,7 @@ local uiElements = {
 				componentList:removeSelected()
 			end,
 			add = function()
-				currentWindow = ui.newComponentWindow()
+				currentWindow = ui.newComponentWindow(componentList)
 			end},
 	ui.buttons.move{
 			x = 6, y = entityListHeight + 1,
@@ -138,24 +137,26 @@ local uiElements = {
 			label = "save",
 			labelColor = colors.green, color = colors.lime, clickedColor = colors.yellow,
 			onClick = function()
-				utils.gameSave.save(saveFile, gameEntities)
+				gameSave.save(saveFile, runtime.entities)
 			end},
 	ui.button{
 			x = w - 8, y = h,
 			w = 3, h = 1,
 			label = "run",
-			labelColor = colors.blue, color = colors.lightBlue, clickedColor = colors.white,
+			labelColor = colors.blue, color = colors.lightBlue,
+			clickedColor = colors.white,
 			onClick = function()
 				require("utils.log").clear()
-				local runningGameEntities = utils.table.copy(gameEntities)
-				runningGameWindow.reposition(runFullscreen and 1 or sideBarWidth + 1, 1, runFullscreen and w or w - sideBarWidth + 1, h)
-				utils.game.run(utils.table.copy(gameEntities), runningGameWindow)
+				runtime.window.reposition(runFullscreen and 1 or sideBarWidth + 1, 1,
+						runFullscreen and w or w - sideBarWidth + 1, h)
+				runtime:run()
 			end},
 	ui.button{
 			x = w - 5, y = h,
 			w = 1, h = 1,
 			label = "-",
-			labelColor = colors.white, color = colors.gray, clickedColor = colors.lightGray,
+			labelColor = colors.white, color = colors.gray,
+			clickedColor = colors.lightGray,
 			onClick = function(self)
 				runFullscreen = not runFullscreen
 				self.label = runFullscreen and "+" or "-"
@@ -164,34 +165,22 @@ local uiElements = {
 			x = w - 2, y = h,
 			w = 3, h = 1,
 			label = "exit",
-			labelColor = colors.red, color = colors.orange, clickedColor = colors.yellow,
+			labelColor = colors.red, color = colors.orange,
+			clickedColor = colors.yellow,
 			onClick = function()
 				shouldQuit = true
 			end}
 }
 
-local function updateComponentInEditor(component, event, var1, var2, var3)
-	if event:sub(1, #"mouse") == "mouse" then
-		var2 = var2 - sideBarWidth
-	end
-
-	local newWindow = components[component.type].editor(
-			utils.entity.entityTable(entityList:getSelected()),
-			event, var1, var2, var3, keyboard)
-	if newWindow then
-		currentWindow = newWindow
-	end
-end
-
 local function updateEditor(event, var1, var2, var3)
-	keyboard:update(event, var1, var2, var3)
+	keyboard:update(event, var1)
 
 	if currentWindow then
 		if currentWindow:update(event, var1, var2, var3) then
 			currentWindow = nil
 		end
 	else
-		for _, element in pairs(uiElements) do
+		for _, element in ipairs(uiElements) do
 			if not element.hidden then
 				element:update(event, var1, var2, var3)
 			end
@@ -201,13 +190,23 @@ local function updateEditor(event, var1, var2, var3)
 			lastDragClickX = var2
 			lastDragClickY = var3
 		elseif event == "mouse_drag" and var1 == 3 then
-			cameraX = cameraX - (lastDragClickX - var2)
-			cameraY = cameraY - (lastDragClickY - var3)
+			runtime.cameraX = runtime.cameraX - (lastDragClickX - var2)
+			runtime.cameraY = runtime.cameraY - (lastDragClickY - var3)
 			lastDragClickX = var2
 			lastDragClickY = var3
 		elseif not event:find("mouse") or (var2 > sideBarWidth and var3 < h) then
-			if componentList:getSelected() then
-				updateComponentInEditor(componentList:getSelected(), event, var1, var2, var3)
+			local selected = componentList:getSelected()
+			if selected then
+				if event:sub(1, #"mouse") == "mouse" then
+					var2 = var2 - sideBarWidth
+				end
+			
+				local newWindow = components[selected.type].editor(
+						entityUtils.entityTable(entityList:getSelected()),
+						runtime, event, var1, var2, var3)
+				if newWindow then
+					currentWindow = newWindow
+				end
 			end
 		end
 	end
@@ -217,11 +216,8 @@ local function drawEditor()
 	if currentWindow then
 		currentWindow:render()
 	else
-		local oldTerm = term.redirect(gameWindow)
-		utils.game.render(gameEntities, entityList, componentList, true)
-		term.redirect(oldTerm)
-
-		for _, element in pairs(uiElements) do
+		runtime:render()
+		for _, element in ipairs(uiElements) do
 			if not element.hidden then
 				element:render()
 			end
@@ -229,6 +225,7 @@ local function drawEditor()
 	end
 end
 
+require("utils.log").clear()
 os.startTimer(0)
 while true do
 	drawEditor()

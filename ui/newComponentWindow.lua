@@ -1,5 +1,5 @@
 local tableUtils = require "utils.table"
-local components = require "components"
+local components = require "components.components"
 local newList = require "ui.list"
 local newWindow = require "ui.window"
 
@@ -13,7 +13,7 @@ local componentList = newList({
 			return item
 		end,
 		onDoubleClick = function(self, item)
-			componentList:addComponent(item)
+			self.list:addComponent(item)
 			shouldClose = true
 		end})
 
@@ -21,8 +21,9 @@ for k, v in pairs(components) do
 	table.insert(componentList.items, k)
 end
 
-return function()
+return function(list)
 	shouldClose = false
+	componentList.list = list
 	return newWindow{
 		visible = true,
 		title = "Choose a component",

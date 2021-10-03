@@ -78,22 +78,21 @@ return {
 		tiles = {},
 		tileset = {}
 	},
-	init = function(self)
-	end,
-	render = function(self)
+	needs = {
+		"pos"
+	},
+	render = function(self, game)
 		local w, h = term.getSize()
 		for x = 1, w do
 			for y = 1, h do
-				local tx, ty = math.floor(x - cameraX - self.x + 1), math.floor(y - cameraY - self.y + 1)
+				local tx, ty = math.floor(x - game.cameraX - self.x + 1), math.floor(y - game.cameraY - self.y + 1)
 				if self.tiles[tx] and self.tiles[tx][ty] then
 					draw.pixelTexture(x, y, self.tileset[self.tiles[tx][ty]])
 				end
 			end
 		end
 	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
-	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
+	editorUpdate = function(self, editor, game, event, var1, var2, var3)
 		if event == "mouse_click" or event == "mouse_drag" then
 			local didSelectTile = false
 			for i, tile in ipairs(self.tileset) do
@@ -118,8 +117,8 @@ return {
 				})
 			end
 			if not didSelectTile then
-				local tx = var2 - self.x + 1 - cameraX
-				local ty = var3 - self.y + 1 - cameraY
+				local tx = var2 - self.x + 1 - editor.cameraX
+				local ty = var3 - self.y + 1 - editor.cameraY
 				if not self.tiles[tx] then
 					self.tiles[tx] = {}
 				end
@@ -140,8 +139,4 @@ return {
 		end
 		draw.text(#self.tileset * 2 + 1, 1, "+", colors.lightGray, colors.gray)
 	end,
-	
-	needs = {
-		"pos"
-	}
 }

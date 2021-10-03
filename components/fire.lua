@@ -22,14 +22,16 @@ return {
 	args = {
 		particles = {}
 	},
-	init = function(self)
-	end,
-	render = function(self)
+	needs = {
+		"pos"
+	},
+	render = function(self, game)
 		for _, p in ipairs(self.particles) do
-			paintutils.drawPixel(self.x + p.x + cameraX, self.y + p.y + cameraY, colorFlow[p.state])
+			paintutils.drawPixel(self.x + p.x + game.cameraX,
+					self.y + p.y + game.cameraY, colorFlow[p.state])
 		end
 	end,
-	update = function(self, event, var1, var2, var3, entities, keyboard, delta)
+	update = function(self)
 		if math.random(1, 5) then
 			table.insert(self.particles, newParticle())
 		end
@@ -53,13 +55,8 @@ return {
 			end
 		end
 	end,
-	editor = function(self, event, var1, var2, var3, keyboard)
+	editorRender = function(self, editor, game)
+		draw.box(self.x - 1 + game.cameraX, self.y - 2 + game.cameraY, 3, 3,
+				colors.red)
 	end,
-	editorRender = function(self)
-		draw.box(self.x - 1 + cameraX, self.y - 2 + cameraY, 3, 3, colors.red)
-	end,
-	
-	needs = {
-		"pos"
-	}
 }
