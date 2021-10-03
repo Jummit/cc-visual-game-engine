@@ -1,4 +1,4 @@
-local entityUtils = require "utils.entity"
+local entityUtils = require "game.entityUtils"
 
 return {
 	args = {

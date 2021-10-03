@@ -1,4 +1,4 @@
-local cameraUtils = require "utils.camera"
+local cameraUtils = require "game.camera"
 
 return {
 	needs = {

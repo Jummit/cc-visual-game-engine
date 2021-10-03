@@ -18,11 +18,13 @@ local runFullscreen = false
 local shouldQuit = false
 local lastDragClickX
 local lastDragClickY
-local currentWindow
 
 local keyboard = require("utils.keyboard")()
 local runtime = require("game.runtime")(gameSave.load(saveFile) or {},
 		window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h))
+local editor = {
+	window
+}
 
 local componentList = ui.list({
 		x = 2, y = entityListHeight + 4,
@@ -175,9 +177,9 @@ local uiElements = {
 local function updateEditor(event, var1, var2, var3)
 	keyboard:update(event, var1)
 
-	if currentWindow then
-		if currentWindow:update(event, var1, var2, var3) then
-			currentWindow = nil
+	if editor.currentWindow then
+		if editor.currentWindow:update(event, var1, var2, var3) then
+			editor.currentWindow = nil
 		end
 	else
 		for _, element in ipairs(uiElements) do
@@ -200,13 +202,9 @@ local function updateEditor(event, var1, var2, var3)
 				if event:sub(1, #"mouse") == "mouse" then
 					var2 = var2 - sideBarWidth
 				end
-			
-				local newWindow = components[selected.type].editor(
+				components[selected.type].editorUpdate(
 						entityUtils.entityTable(entityList:getSelected()),
-						runtime, event, var1, var2, var3)
-				if newWindow then
-					currentWindow = newWindow
-				end
+						editor, runtime, event, var1, var2, var3)
 			end
 		end
 	end
@@ -230,7 +228,7 @@ os.startTimer(0)
 while true do
 	drawEditor()
 	local event, var1, var2, var3 = os.pullEvent()
-	keyboard.update(event, var1, var2, var3)
+	keyboard.update(event, var1, var2)
 	if keyboard.q and keyboard.leftCtrl or shouldQuit then
 		break
 	end

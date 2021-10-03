@@ -1,5 +1,5 @@
 local draw = require "utils.draw"
-local cameraUtils = require "utils.camera"
+local cameraUtils = require "game.camera"
 
 return {
 	args = {

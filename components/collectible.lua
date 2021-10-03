@@ -1,4 +1,4 @@
-local entityUtils = require "utils.entity"
+local entityUtils = require "game.entityUtils"
 local mathUtils = require "utils.math"
 
 return {

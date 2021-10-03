@@ -1,6 +1,6 @@
 local components = require "components.components"
 local tableUtils = require "utils.table"
-local entityUtils = require "utils.entity"
+local entityUtils = require "game.entityUtils"
 local newKeyboard = require "utils.keyboard"
 
 return function(entities, window)
@@ -13,7 +13,7 @@ return function(entities, window)
 		keyboard = newKeyboard(),
 		render = function(self)
 			local oldTerm = term.redirect(window)
-			term.setVisible(false)
+			window.setVisible(false)
 			term.setBackgroundColor(colors.white)
 			term.clear()
 			for _, entity in ipairs(entities) do
@@ -21,7 +21,7 @@ return function(entities, window)
 					components[component.type].render(entityUtils.entityTable(entity), self)
 				end
 			end
-			term.setVisible(true)
+			window.setVisible(true)
 			term.redirect(oldTerm)
 		end,
 		update = function(self)

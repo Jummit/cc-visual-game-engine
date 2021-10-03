@@ -1,5 +1,5 @@
-local entityUtils = require "utils.entity"
-local inventoryUtils = require "utils.inventory"
+local entityUtils = require "game.entityUtils"
+local inventoryUtils = require "game.inventory"
 
 return {
 	needs = {

@@ -101,7 +101,7 @@ return {
 						self.selectedTile = i
 					elseif var1 == 2 then
 						mapWindow.tile = self.tileset[i]
-						return mapWindow
+						editor.window = mapWindow
 					else
 						table.remove(self.tileset, i)
 					end
@@ -117,8 +117,8 @@ return {
 				})
 			end
 			if not didSelectTile then
-				local tx = var2 - self.x + 1 - editor.cameraX
-				local ty = var3 - self.y + 1 - editor.cameraY
+				local tx = var2 - self.x + 1 - game.cameraX
+				local ty = var3 - self.y + 1 - game.cameraY
 				if not self.tiles[tx] then
 					self.tiles[tx] = {}
 				end
