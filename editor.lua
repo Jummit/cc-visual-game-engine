@@ -276,6 +276,10 @@ return function(save)
 					end
 				end
 
+				local visibleSideBar = sideBarWidth
+				if not self.inspector.hidden then
+					visibleSideBar = visibleSideBar + self.inspectorPanel.w + 1
+				end
 				if event == "mouse_click" and var1 == 3 then
 					self.lastDragClickX = var2
 					self.lastDragClickY = var3
@@ -284,7 +288,7 @@ return function(save)
 					self.runtime.cameraY = self.runtime.cameraY - (self.lastDragClickY - var3)
 					self.lastDragClickX = var2
 					self.lastDragClickY = var3
-				elseif not event:find("mouse") or (var2 > sideBarWidth and var3 < h) then
+				elseif not event:find("mouse") or (var2 > visibleSideBar and var3 < h) then
 					local selected = self.componentList:getSelected()
 					if selected then
 						if event:sub(1, #"mouse") == "mouse" then
