@@ -42,7 +42,7 @@ return function(entities, window)
 			end
 			
 			if event == "timer" then
-				os.startTimer(.1)
+				os.startTimer(0.05)
 			end
 			
 			for _, entity in ipairs(self.entities) do
