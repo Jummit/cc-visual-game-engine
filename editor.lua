@@ -4,9 +4,8 @@ local entityUtils = require "game.entityUtils"
 local gameSave = require "game.save"
 local ui = tableUtils.fromFiles("ui")
 local w, h = term.getSize()
-local entityListHeight = 7
-local sideBarWidth = 12
-local componentListHeight = 7
+local sideBarWidth = math.min(math.floor(w / 4), 17)
+local listHeight = math.floor(h / 2 - 2)
 
 return function(save)
     return {
@@ -18,25 +17,75 @@ return function(save)
         window = nil,
         runtime = nil,
         keyboard = require("utils.keyboard")(),
+        setInspectingComponent = function(self, entity, component)
+            self.inspectorPanel.hidden = component == nil
+            self.inspectorLabel.hidden = component == nil
+            self.inspectorSeparator.hidden = component == nil
+            self.inspector.hidden = component == nil
+            if entity then
+                self.inspector.properties = {}
+                for arg, value in pairs(component.args) do
+                    self.inspector.properties[arg] = value
+                end
+            end
+        end,
         init = function(self)
             self.runtime = require("game.runtime")(gameSave.load(self.saveFile) or {},
             window.create(term.current(), sideBarWidth + 1, 1, w - sideBarWidth, h))
-            self.componentList = ui.list({
-                    x = 2, y = entityListHeight + 4,
-                    w = sideBarWidth - 2, h = componentListHeight,
+            self.inspectorLabel = ui.centerText{
+                x = sideBarWidth + 2,
+                y = h - 1,
+                w = sideBarWidth,
+                h = 1,
+                text = "Inspector",
+                textColor = colors.white,
+                backgroundColor = colors.lightGray,
+            }
+            self.inspectorPanel = ui.box{
+                x = sideBarWidth + 2,
+                y = 1,
+                w = sideBarWidth,
+                h = h,
+                color = colors.lightGray,
+            }
+            self.inspectorSeparator = ui.box{
+                x = sideBarWidth + 1,
+                y = 1,
+                w = 1,
+                h = h,
+                color = colors.gray,
+            }
+            self.inspector = ui.inspector{
+                x = sideBarWidth + 3,
+                y = 2,
+                w = sideBarWidth - 2,
+                h = h,
+            }
             self.componentList = ui.list{
                 x = 2,
-                y = entityListHeight + 4,
+                y = listHeight + 4,
                 w = sideBarWidth - 2,
-                h = componentListHeight,
+                h = listHeight,
                 items = {},
+                onDoubleClick = function(_, item)
+                    if self.inspector.hidden then
+                        self:setInspectingComponent(self.entityList:getSelected(), item)
+                    else
+                        self:setInspectingComponent()
+                    end
+                end,
+                onItemSelected = function(_, item)
+                    if not self.inspector.hidden then
+                        self:setInspectingComponent(self.entityList:getSelected(), item)
+                    end
+                end,
                 getLabel = function(item)
                     return item.type
                 end,
-                shouldDelete = function(self, toDelete)
-                    for _, component in ipairs(self.items) do
-                        for _, neededComponent in ipairs(component.needs) do
-                            if toDelete.type == neededComponent then
+                shouldDelete = function(listSelf, toDelete)
+                    for _, component in ipairs(listSelf.items) do
+                        for _, neededComponent in ipairs(components[component].needs) do
+                            if toDelete == neededComponent then
                                 return false
                             end
                         end
@@ -58,17 +107,17 @@ return function(save)
                         end
                     end
 
-                    listSelf:add({
-                            type = componentType,
-                            args = tableUtils.copy(components[componentType].args),
-                            needs = components[componentType].needs})
+                    listSelf:add{
+                        type = componentType,
+                        args = tableUtils.copy(components[componentType].args),
+                    }
                 end
             }
             self.entityList = ui.list{
                 x = 2,
                 y = 2,
                 w = sideBarWidth - 2,
-                h = entityListHeight,
+                h = listHeight,
                 items = self.runtime.entities,
                 getLabel = function(item)
                     return item.name
@@ -104,10 +153,13 @@ return function(save)
                 },
                 self.entityList,
                 self.componentList,
+                self.inspectorPanel,
+                self.inspectorLabel,
+                self.inspectorSeparator,
                 self.inspector,
                 ui.centerText{
                     x = 2,
-                    y = entityListHeight + 2,
+                    y = listHeight + 2,
                     w = sideBarWidth - 2,
                     h = 1,
                     text = "Entities",
@@ -115,7 +167,7 @@ return function(save)
                 },
                 ui.centerText{
                     x = 2,
-                    y = entityListHeight + componentListHeight + 4,
+                    y = listHeight + listHeight + 4,
                     w = sideBarWidth - 2,
                     h = 1,
                     text = "Components",
@@ -123,7 +175,7 @@ return function(save)
                 },
                 ui.buttons.addAndDelete{
                     x = 2,
-                    y = entityListHeight + 1,
+                    y = listHeight + 1,
                     del = function()
                         self.componentList.items = {}
                         self.entityList:removeSelected()
@@ -137,7 +189,7 @@ return function(save)
                 },
                 ui.buttons.addAndDelete{
                     x = 2,
-                    y = entityListHeight + componentListHeight + 3,
+                    y = listHeight + listHeight + 3,
                     del = function()
                         self.componentList:removeSelected()
                     end,
@@ -147,11 +199,11 @@ return function(save)
                 },
                 ui.buttons.move{
                     x = 6,
-                    y = entityListHeight + 1,
+                    y = listHeight + 1,
                     list = self.entityList
                 },
                 ui.buttons.move{
-                    x = 6, y = entityListHeight + componentListHeight + 3,
+                    x = 6, y = listHeight + listHeight + 3,
                     list = self.componentList
                 },
                 ui.button{
@@ -198,9 +250,9 @@ return function(save)
                     end
                 },
                 ui.button{
-                    x = w - 2,
+                    x = w - 3,
                     y = h,
-                    w = 3,
+                    w = 4,
                     h = 1,
                     label = "exit",
                     labelColor = colors.red,
@@ -208,8 +260,10 @@ return function(save)
                     clickedColor = colors.yellow,
                     onClick = function()
                         self.shouldQuit = true
-                    end}
+                    end
+                },
             }
+            self:setInspectingComponent()
         end,
         update = function(self, event, var1, var2, var3)
             self.keyboard:update(event, var1)

@@ -3,14 +3,14 @@ local draw = {}
 function draw.box(x, y, w, h, color)
 	paintutils.drawFilledBox(
 			x, y,
-			w + x - 1, h + y - 1,
+			x + w - 1, y + h - 1,
 			color)
 end
 
 function draw.line(x, y, dx, dy, color)
 	paintutils.drawLine(
 			x, y,
-			x + dx - 1, y + dy - 1,
+			x + dx, y + dy,
 			color)
 end
 

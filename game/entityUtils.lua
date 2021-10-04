@@ -13,7 +13,9 @@ function entityUtils.entityTable(entity)
 		end,
 		__newindex = function(self, key, value)
 			for _, component in ipairs(entity.components) do
-				component.args[key] = value
+				if component.args[key] ~= nil then
+					component.args[key] = value
+				end
 			end
 		end
 	})

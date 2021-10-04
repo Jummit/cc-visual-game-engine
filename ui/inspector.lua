@@ -16,8 +16,10 @@ local function getEditorForProperty(self, propertyValue,
 	elseif type(propertyValue) == "table" then
 		return
 	end
-	element.x = self.x + 7
-	element.y = self.y + propertyNum * 2
+	element.x = self.x + math.floor(self.w / 2)
+	element.y = self.y + propertyNum * 2 + 1
+	element.w = math.floor(self.w / 3)
+	element.h = 1
 	element.propertyType = type(propertyValue)
 	return element
 end
@@ -47,10 +49,10 @@ return function(t)
 				if element then
 					term.setBackgroundColor(colors.lightGray)
 					term.setTextColor(colors.gray)
-					term.setCursorPos(self.position.x,
-							self.position.y + propertyNum * 2)
+					term.setCursorPos(self.x,
+							self.y + propertyNum * 2)
 					term.write(string.sub(propertyName:sub(1, 1):upper()
-							.. propertyName:sub(2, -1), 1, 6))
+							.. propertyName:sub(2, -1), 1, self.w))
 					element:draw()
 					propertyNum = propertyNum + 1
 				end

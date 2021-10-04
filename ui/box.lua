@@ -6,6 +6,6 @@ return function(t)
 			draw.box(self.x, self.y, self.w, self.h, self.color)
 		end,
 		update = function(self)
-		end
+		end,
 	}})
 end
