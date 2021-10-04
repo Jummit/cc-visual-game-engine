@@ -17,8 +17,6 @@ return function(entities, window)
 			term.clear()
 			for _, entity in ipairs(entities) do
 				for _, component in ipairs(entity.components) do
-					-- error(component.type)
-					-- error(components[component.type].draw)
 					components[component.type].draw(entityUtils.entityTable(entity), self)
 				end
 			end
@@ -60,6 +58,7 @@ return function(entities, window)
 			end
 		end,
 		run = function(self)
+			self.keyboard = newKeyboard()
 			for id, entity in ipairs(self.entities) do
 				for _, component in ipairs(entity.components) do
 					component.args.id = id
