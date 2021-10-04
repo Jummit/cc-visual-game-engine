@@ -59,12 +59,6 @@ return function(entities, window)
 		end,
 		run = function(self)
 			self.keyboard = newKeyboard()
-			for id, entity in ipairs(self.entities) do
-				for _, component in ipairs(entity.components) do
-					component.args.id = id
-				end
-			end
-			
 			for _, entity in ipairs(self.entities) do
 				for _, component in ipairs(entity.components) do
 					components[component.type].init(entityUtils.entityTable(entity))

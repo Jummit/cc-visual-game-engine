@@ -23,7 +23,7 @@ function entityUtils.entityTable(entity)
 end
 
 function entityUtils.areColliding(entity1, entity2)
-	if not (entity1.shape and entity2.shape) or (entity1.id == entity2.id) then
+	if not (entity1.shape and entity2.shape) or (entity1 == entity2) then
 		return
 	end
 	for x, row in pairs(entity1.shape) do
@@ -57,7 +57,10 @@ function entityUtils.moveAndCollide(entity, entities, x, y, delta, speed)
 end
 
 function entityUtils.testMove(entity, entities, x, y)
-	return entityUtils.moveAndCollide({x = entity.x, y = entity.y, shape = entity.shape, id = entity.id}, entities, x, y, 1, 1)
+	local startX, startY = entity.x, entity.y
+	local collision = entityUtils.moveAndCollide(entity, entities, x, y, 1, 1)
+	entity.x, entity.y = startX, startY
+	return collision
 end
 
 function entityUtils.findEntityWithComponent(entities, componentType)
