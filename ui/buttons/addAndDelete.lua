@@ -2,17 +2,23 @@ local newButton = require "ui.button"
 
 return function(t)
 	local add = newButton{
-			x = t.x, y = t.y,
-			w = 3, h = 1,
-			label = "+",
-			color = colors.green, clickedColor = colors.lime, labelColor = colors.white,
-			onClick = t.add}
+		x = t.x, y = t.y,
+		w = 3, h = 1,
+		label = "+",
+		color = colors.green,
+		clickedColor = colors.lime,
+		labelColor = colors.white,
+		onClick = t.add,
+	}
 	local del = newButton{
-			x = t.x + 3, y = t.y,
-			w = 1, h = 1,
-			label = "-",
-			color = colors.red, clickedColor = colors.orange, labelColor = colors.white,
-			onClick = t.del}
+		x = t.x + 3, y = t.y,
+		w = 1, h = 1,
+		label = "-",
+		color = colors.red,
+		clickedColor = colors.orange,
+		labelColor = colors.white,
+		onClick = t.del,
+	}
 
 	return {
 		draw = function(self)
