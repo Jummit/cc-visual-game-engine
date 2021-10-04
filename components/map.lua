@@ -14,7 +14,7 @@ local mapButtons = {
 		color = colors.gray, labelColor = colors.lightGray,
 		clickedColor = colors.white,
 		onClick = function(self)
-			self:render()
+			self:draw()
 			_, self.tile.char = os.pullEvent("char")
 			self.pressed = false
 		end
@@ -43,7 +43,7 @@ local mapButtons = {
 
 local mapWindow = window{
 	tile = nil,
-	render = function(self, x, y, w, h)
+	draw = function(self, x, y, w, h)
 		local tx, ty = x + 18, y + 3
 		for x = 1, 5 do
 			for y = 1, 4 do
@@ -51,10 +51,10 @@ local mapWindow = window{
 			end
 		end
 		for _, button in ipairs(mapButtons) do
-			button:render()
+			button:draw()
 		end
 		if showTileEditorColorWheel then
-			colorRadialMenu.render(35, 10)
+			colorRadialMenu.draw(35, 10)
 		end
 	end,
 	update = function(self, event, var1, var2, var3)
@@ -81,7 +81,7 @@ return {
 	needs = {
 		"pos"
 	},
-	render = function(self, game)
+	draw = function(self, game)
 		local w, h = term.getSize()
 		for x = 1, w do
 			for y = 1, h do
@@ -92,7 +92,7 @@ return {
 			end
 		end
 	end,
-	editorUpdate = function(self, editor, game, event, var1, var2, var3)
+	updateEditor = function(self, editor, game, event, var1, var2, var3)
 		if event == "mouse_click" or event == "mouse_drag" then
 			local didSelectTile = false
 			for i, tile in ipairs(self.tileset) do
@@ -130,7 +130,7 @@ return {
 			end
 		end
 	end,
-	editorRender = function(self)
+	drawEditor = function(self)
 		for i, tile in ipairs(self.tileset) do
 			draw.pixelTexture(i * 2, 1, tile)
 			draw.pixelTexture(i * 2, 2, tile)

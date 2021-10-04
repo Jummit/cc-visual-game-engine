@@ -13,7 +13,7 @@ local componentList = newList({
 			self.shouldClose = true
 		end})
 
-for k, v in pairs(components) do
+for k, _ in pairs(components) do
 	table.insert(componentList.items, k)
 end
 
@@ -22,12 +22,12 @@ return function(list)
 	return newWindow{
 		visible = true,
 		title = "Choose a component",
-		render = function(self, x, y, w, h)
+		draw = function(self, x, y, w, h)
 			componentList.x = x
 			componentList.y = y
 			componentList.w = w
 			componentList.h = h
-			componentList:render()
+			componentList:draw()
 		end,
 		update = function(self, event, var1, var2, var3)
 			componentList:update(event, var1, var2, var3)

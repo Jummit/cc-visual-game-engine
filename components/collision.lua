@@ -5,7 +5,7 @@ return {
 	needs = {
 		"pos"
 	},
-	editorUpdate = function(self, editor, game, event, var1, var2, var3)
+	updateEditor = function(self, editor, game, event, var1, var2, var3)
 		if event == "mouse_click" or event == "mouse_drag" then
 			local x = var2 - self.x + 1 - game.cameraX
 			local y = var3 - self.y + 1 - game.cameraY
@@ -20,7 +20,7 @@ return {
 			end
 		end
 	end,
-	editorRender = function(self, game)
+	drawEditor = function(self, game)
 		for x, row in pairs(self.shape) do
 			for y, on in pairs(row) do
 				if on then

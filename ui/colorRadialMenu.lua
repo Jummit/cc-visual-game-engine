@@ -10,7 +10,7 @@ local function getSegmentPos(x, y, segment)
 end
 
 return {
-	render = function(x, y)
+	draw = function(x, y)
 		for segment = 1, #gradient do
 			local x, y = getSegmentPos(x, y, segment)
 			if gradient[segment] == "transparent" then

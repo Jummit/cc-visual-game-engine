@@ -18,7 +18,7 @@ return {
 			table.insert(self.particles, newParticle())
 		end
 	end,
-	render = function(self, game)
+	draw = function(self, game)
 		for _, p in ipairs(self.particles) do
 			paintutils.drawPixel(self.x + p.x + game.cameraX,
 					self.y + p.y + game.cameraY, colors.lightBlue)

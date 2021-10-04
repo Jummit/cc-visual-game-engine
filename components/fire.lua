@@ -25,7 +25,7 @@ return {
 	needs = {
 		"pos"
 	},
-	render = function(self, game)
+	draw = function(self, game)
 		for _, p in ipairs(self.particles) do
 			paintutils.drawPixel(self.x + p.x + game.cameraX,
 					self.y + p.y + game.cameraY, colorFlow[p.state])
@@ -55,7 +55,7 @@ return {
 			end
 		end
 	end,
-	editorRender = function(self, editor, game)
+	drawEditor = function(self, editor, game)
 		draw.box(self.x - 1 + game.cameraX, self.y - 2 + game.cameraY, 3, 3,
 				colors.red)
 	end,

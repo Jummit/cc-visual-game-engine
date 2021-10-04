@@ -14,7 +14,7 @@ return {
 	needs = {
 		"pos"
 	},
-	render = function(self)
+	draw = function(self)
 		for slotNum, item in ipairs(self.slots) do
 			local slotX, slotY = getSlotPos(self, slotNum)
 			paintutils.drawFilledBox(slotX, slotY, slotX + 2, slotY + 2, colors.gray)

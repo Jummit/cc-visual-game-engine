@@ -11,14 +11,14 @@ local h = sh - ym * 2
 return function(t)
 	return {
 		title = t.title,
-		render = function(self)
+		draw = function(self)
 			draw.box(x - 1, y + 1, w, h, colors.black)
 			draw.box(x, y, w, h, colors.lightGray)
 			draw.line(x, y, w, 1, colors.gray)
 			draw.centerText(x, y, w, 1, self.title, colors.white, colors.gray)
 			draw.text(x + w - 1, y, "x", colors.white, colors.red)
 
-			t.render(self, x + 2, y + 2, w - 4, h - 4)
+			t.draw(self, x + 2, y + 2, w - 4, h - 4)
 		end,
 		update = function(self, event, var1, var2, var3)
 			if event == "mouse_click" and var2 == w + x - 1 and var3 == y then

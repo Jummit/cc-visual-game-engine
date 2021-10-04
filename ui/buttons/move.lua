@@ -54,9 +54,9 @@ return function(t)
 	}
 
 	return {
-		render = function(self)
-			up:render()
-			down:render()
+		draw = function(self)
+			up:draw()
+			down:draw()
 		end,
 		update = function(self, event, var1, var2, var3)
 			up:update(event, var1, var2, var3)

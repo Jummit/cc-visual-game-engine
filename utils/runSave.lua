@@ -2,7 +2,9 @@ return function(f)
 	local t = window.create(term.current(), 1, 1, term.getSize())
 	local oldTerm = term.redirect(t)
 	
-	local success, message = pcall(f)
+	local success, message = xpcall(f, function(error)
+		return tostring(error).."\n"..debug.traceback()
+	end)
 	
 	t.setVisible(false)
 	term.redirect(oldTerm)

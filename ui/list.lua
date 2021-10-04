@@ -3,7 +3,7 @@ local mathUtils = require "utils.math"
 
 return function(t)
 	return setmetatable(t, {__index = {
-		render = function(self)
+		draw = function(self)
 			draw.box(self.x, self.y, self.w, self.h, colors.gray)
 
 			for i, item in ipairs(self.items) do

@@ -9,7 +9,7 @@ return {
 		"pos",
 		"collision"
 	},
-	render = function(self)
+	draw = function(self)
 		term.setTextColor(colors.black)
 		term.setCursorPos(1, 1)
 		term.write("Points: " .. self.points)

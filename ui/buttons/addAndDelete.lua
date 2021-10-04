@@ -15,9 +15,9 @@ return function(t)
 			onClick = t.del}
 
 	return {
-		render = function(self)
-			del:render()
-			add:render()
+		draw = function(self)
+			del:draw()
+			add:draw()
 		end,
 		update = function(self, event, var1, var2, var3)
 			del:update(event, var1, var2, var3)

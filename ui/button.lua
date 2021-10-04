@@ -3,7 +3,7 @@ local mathUtils = require "utils.math"
 
 return function(t)
 	return setmetatable(t, {__index = {
-		render = function(self)
+		draw = function(self)
 			draw.box(self.x, self.y, self.w, self.h, (self.pressed and self.clickedColor) or self.color)
 			draw.centerText(self.x, self.y, self.w, self.h, self.label, self.labelColor, term.getBackgroundColor())
 		end,
