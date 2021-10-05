@@ -1,32 +1,29 @@
 local tableUtils = {}
 
 function tableUtils.clear(t)
-	for k, v in pairs(t) do
+	for k, _ in pairs(t) do
 		t[k] = nil
 	end
 end
 
-local copy
-function copy(t)
+function tableUtils.copy(t)
 	local n = {}
 	for k, v in pairs(t) do
 		if type(v) == "table" then
-			n[k] = copy(v)
+			n[k] = tableUtils.copy(v)
 		else
 			n[k] = v
 		end
 	end
 	return n
 end
-tableUtils.copy = copy
 
-local fromFiles
-function fromFiles(folder)
+function tableUtils.fromFiles(folder)
 	local t = {}
 	for _, f in ipairs(fs.list(folder)) do
 		local file = fs.combine(folder, f)
 		if fs.isDir(file) then
-			t[f] = fromFiles(file)
+			t[f] = tableUtils.fromFiles(file)
 		else
 			local requirePath = file:gsub("/", "."):match("(.*)[%.].*$")
 			local fileName = requirePath:match("[^%.]*$")
@@ -35,6 +32,5 @@ function fromFiles(folder)
 	end
 	return t
 end
-tableUtils.fromFiles = fromFiles
 
 return tableUtils

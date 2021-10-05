@@ -1,11 +1,8 @@
 local draw = require "utils.draw"
+local element = require "ui.element"
 
-return function(t)
-	return setmetatable(t, {__index = {
-		draw = function(self)
-			draw.box(self.x, self.y, self.w, self.h, self.color)
-		end,
-		update = function(self)
-		end,
-	}})
-end
+return element{
+	draw = function(self)
+		draw.box(self.x, self.y, self.w, self.h, self.color)
+	end,
+}

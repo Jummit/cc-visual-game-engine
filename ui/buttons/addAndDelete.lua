@@ -1,33 +1,34 @@
 local newButton = require "ui.button"
+local element = require "ui.element"
 
-return function(t)
-	local add = newButton{
-		x = t.x, y = t.y,
-		w = 3, h = 1,
-		label = "+",
-		color = colors.green,
-		clickedColor = colors.lime,
-		labelColor = colors.white,
-		onClick = t.add,
-	}
-	local del = newButton{
-		x = t.x + 3, y = t.y,
-		w = 1, h = 1,
-		label = "-",
-		color = colors.red,
-		clickedColor = colors.orange,
-		labelColor = colors.white,
-		onClick = t.del,
-	}
-
-	return {
-		draw = function(self)
-			del:draw()
-			add:draw()
-		end,
-		update = function(self, event, var1, var2, var3)
-			del:update(event, var1, var2, var3)
-			add:update(event, var1, var2, var3)
-		end
-	}
-end
+return element{
+	init = function(self)
+		self.add = newButton{
+			x = self.x,
+			y = self.y,
+			w = 3,
+			label = "+",
+			color = colors.green,
+			clickedColor = colors.lime,
+			labelColor = colors.white,
+			onClick = self.add,
+		}
+		self.del = newButton{
+			x = self.x + 3,
+			y = self.y,
+			label = "-",
+			color = colors.red,
+			clickedColor = colors.orange,
+			labelColor = colors.white,
+			onClick = self.del,
+		}
+	end,
+	draw = function(self)
+		self.del:draw()
+		self.add:draw()
+	end,
+	update = function(self, event, var1, var2, var3)
+		self.del:update(event, var1, var2, var3)
+		self.add:update(event, var1, var2, var3)
+	end,
+}
