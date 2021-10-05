@@ -20,7 +20,7 @@ return {
 			end
 		end
 	end,
-	drawEditor = function(self, game)
+	drawEditor = function(self, editor, game)
 		for x, row in pairs(self.shape) do
 			for y, on in pairs(row) do
 				if on then

@@ -1,4 +1,4 @@
-local entityUtils = require "game.entityUtils"
+local physics = require "game.physics"
 
 return {
 	args = {
@@ -9,7 +9,7 @@ return {
 		"collision"
 	},
 	update = function(self, game)
-		if entityUtils.moveAndCollide(self, game.entities, 0, self.fallSpeed, game.delta, 1) then
+		if physics.moveAndCollide(self, game.entities, 0, self.fallSpeed, game.delta, 1) then
 			self.fallSpeed = 0
 		else
 			self.fallSpeed = self.fallSpeed + 1

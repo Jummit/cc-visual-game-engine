@@ -1,7 +1,7 @@
-local components = require "components.components"
 local tableUtils = require "utils.table"
-local entityUtils = require "game.entityUtils"
 local gameSave = require "game.save"
+local loadComponent = require "game.component"
+local newEntity        = require "game.entity"
 local ui = tableUtils.fromFiles("ui")
 local w, h = term.getSize()
 local sideBarWidth = math.min(math.floor(w / 4), 17)
@@ -77,11 +77,10 @@ return function(save)
 				getLabel = function(item)
 					return item.type
 				end,
-				shouldDelete = function(listSelf, toDelete)
+				shouldDelete = function(listSelf, item)
 					for _, component in ipairs(listSelf.items) do
-						for _, neededComponent in ipairs(
-									components[component].needs) do
-							if toDelete == neededComponent then
+						for _, needed in ipairs(component.needs) do
+							if item == needed then
 								return false
 							end
 						end
@@ -89,24 +88,20 @@ return function(save)
 					return true
 				end,
 				addComponent = function(listSelf, componentType)
-					local newComponent = components[componentType]
-
-					for _, neededComponent in ipairs(newComponent.needs) do
-						local neededExists = false
-						for _, existingComponent in ipairs(listSelf.items) do
-							if existingComponent.type == neededComponent then
-								neededExists = true
+					local new = loadComponent.fromType(
+							self.entityList:getSelected(), componentType)
+					for _, needed in ipairs(new.needs) do
+						local exists = false
+						for _, existing in ipairs(listSelf.items) do
+							if existing.type == needed then
+								exists = true
 							end
 						end
-						if not neededExists then
-							listSelf:addComponent(neededComponent)
+						if not exists then
+							listSelf:addComponent(needed)
 						end
 					end
-
-					listSelf:add{
-						type = componentType,
-						args = tableUtils.copy(components[componentType].args),
-					}
+					listSelf:add(new)
 				end
 			}
 			self.entityList = ui.list{
@@ -172,9 +167,8 @@ return function(save)
 						self.entityList:removeSelected()
 					end,
 					add = function()
-						self.entityList:add({
+						self.entityList:add(newEntity{
 							name = "new",
-							components = {}
 						})
 					end
 				},
@@ -292,9 +286,7 @@ return function(save)
 						if event:sub(1, #"mouse") == "mouse" then
 							var2 = var2 - sideBarWidth
 						end
-						components[selected.type].updateEditor(
-								entityUtils.entityTable(
-								self.entityList:getSelected()), self,
+						selected.updateEditor(selected.parent, self,
 								self.runtime, event, var1, var2, var3)
 					end
 				end
@@ -308,9 +300,7 @@ return function(save)
 				local oldTerm = term.redirect(self.runtime.window)
 				local selected = self.componentList:getSelected()
 				if selected then
-					components[selected.type].drawEditor(
-					entityUtils.entityTable(self.entityList:getSelected()), self,
-							self.runtime)
+					selected.drawEditor(selected.parent, self, self.runtime)
 				end
 				term.redirect(oldTerm)
 				for _, element in ipairs(self.uiElements) do

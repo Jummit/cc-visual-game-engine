@@ -1,4 +1,3 @@
-local entityUtils = require "game.entityUtils"
 local mathUtils = require "utils.math"
 
 return {
@@ -15,11 +14,10 @@ return {
 		term.write("Points: " .. self.points)
 	end,
 	update = function(self, game)
-		for _, e in ipairs(game.entities) do
-			local vars = entityUtils.entityTable(e)
-			if vars.x and vars.y then
-				if vars.x ~= self.x and vars.y ~= self.y then
-					if mathUtils.distance(self.x, self.y, vars.x, vars.y) < 4 then
+		for _, entity in ipairs(game.entities) do
+			if entity.x and entity.y then
+				if entity.x ~= self.x and entity.y ~= self.y then
+					if mathUtils.distance(self.x, self.y, entity.x, entity.y) < 4 then
 						self.points = self.points + 1
 						self.x = math.random(1, 25)
 						self.y = math.random(1, 20)

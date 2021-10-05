@@ -4,6 +4,8 @@ local colorRadialMenu = require "ui.colorRadialMenu"
 return {
 	args = {
 		texture = {},
+	},
+	editorArgs = {
 		showTools = false,
 		clickedX = 0, clickedY = 0,
 		drawColor = colors.black

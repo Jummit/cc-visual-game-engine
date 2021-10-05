@@ -3,8 +3,8 @@ local cameraUtils = require "game.camera"
 
 return {
 	args = {
-		x = 1.0,
-		y = 1.0,
+		x = 1,
+		y = 1,
 	},
 	updateEditor = function(self, editor, game, event, var1, var2, var3)
 		local keyboard = editor.keyboard
@@ -28,6 +28,7 @@ return {
 		end
 	end,
 	drawEditor = function(self, editor, game)
-		draw.text(self.x + game.cameraX, self.y + game.cameraY, "+", colors.lightGray, colors.white)
+		draw.text(self.x + game.cameraX, self.y + game.cameraY, "+",
+				colors.lightGray, colors.white)
 	end,
 }

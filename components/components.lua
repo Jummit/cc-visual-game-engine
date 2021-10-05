@@ -6,6 +6,7 @@ for _, componentFile in ipairs(fs.list("components")) do
 		components[componentName] = setmetatable(require(
 					"components."..componentName), {__index = {
 			args = {},
+			editorArgs = {},
 			needs = {},
 			init = function(self)
 			end,
